@@ -71,7 +71,7 @@ public class FahrenheitMain
         {
             Console.WriteLine("yayy");
         }
-        else 
+        else if (answer != books[author])
         {
             Console.WriteLine("ew");
         }
