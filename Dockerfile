@@ -4,12 +4,22 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Farenheit/Farenheit.csproj", "./Farenheit/"]
-WORKDIR /src/Farenheit
-RUN dotnet restore "./Farenheit.csproj"
+
+# If your project is inside a folder, adjust the path accordingly
+COPY ["Farenheit/Farenheit.csproj", "Farenheit/"]
+WORKDIR "/src/Farenheit"
+RUN dotnet restore
+
+# Copy the entire project
+COPY . .
+WORKDIR "/src/Farenheit"
+
+# Publish the API
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "Farenheit.dll"]
+
+# Correct entry point for an ASP.NET Core Web API
+CMD ["dotnet", "Farenheit.dll"]
