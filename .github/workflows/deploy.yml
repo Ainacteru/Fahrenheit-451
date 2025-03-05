@@ -1,4 +1,4 @@
-name: Deploy to Render
+name: Deploy ASP.NET API
 
 on:
   push:
@@ -6,19 +6,26 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.0'
+          dotnet-version: '7.0'  # Change if using a different .NET version
 
-      - name: Build project
+      - name: Build API
         run: dotnet publish -c Release -o out
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: published-api
+          path: out/
+
       - name: Deploy to Render
-        run: curl -X POST https://api.render.com/deploy/some-render-api-url
+        run: curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK }}
