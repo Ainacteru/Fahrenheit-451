@@ -32,7 +32,7 @@ public class FahrenheitMain
         }
     }
     
-    static boolean checkForName(string answer)
+    static bool checkForName(string answer)
     {
         string[] authors = {"Jonathan Swift", "Charles Darwin, Schopenhauer", "Einstein", "Albert Schweitzer", "Aristophanes", "Mahatma Ghandi", "Gautama Buddha", "Confucius", "Thomas Love Peacock", "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"};
         
