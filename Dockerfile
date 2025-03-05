@@ -4,10 +4,9 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Farenheit.csproj", "./"]
+COPY ["Farenheit/Farenheit.csproj", "./Farenheit/"]
+WORKDIR /src/Farenheit
 RUN dotnet restore "./Farenheit.csproj"
-COPY . .
-WORKDIR "/src/"
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
