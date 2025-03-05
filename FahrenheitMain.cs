@@ -2,6 +2,7 @@ using System;
 
 public class FahrenheitMain
 {
+    public static int author = 0;
     public static void Main(string[] args)
     {
         Console.WriteLine("Welcome to my Farhenheit 451 thingy");
@@ -13,7 +14,7 @@ public class FahrenheitMain
                 askForName();
                 break;
             default:
-                Console.WriteLine("why did you not press y or n, please restart the program");
+                Console.WriteLine("ew");
                 break;
         } 
     
@@ -25,7 +26,7 @@ public class FahrenheitMain
         
         string answer = Console.ReadLine();
         if (checkForName(answer)){
-            Console.WriteLine("yay");
+            nameBook();
         }
         else {
             Console.WriteLine("ew");
@@ -34,13 +35,46 @@ public class FahrenheitMain
     
     static bool checkForName(string answer)
     {
-        string[] authors = {"Jonathan Swift", "Charles Darwin, Schopenhauer", "Einstein", "Albert Schweitzer", "Aristophanes", "Mahatma Ghandi", "Gautama Buddha", "Confucius", "Thomas Love Peacock", "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"};
+        string[] authors = {"Jonathan Swift", 
+        "Charles Darwin, Schopenhauer", "Einstein", "Albert Schweitzer", "Aristophanes", "Mahatma Ghandi", "Gautama Buddha", "Confucius", "Thomas Love Peacock", "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"};
         
-        foreach (var writer in authors){
-            if (answer == writer){
+        for(int i = 0; i < authors.Length; i++){
+            if (answer == authors[i]){
+                author = i;
                 return true;
             }
         }
         return false;
+    }
+    
+    static void nameBook()
+    {
+        string[] books = {
+            "Gulliver's Travels", // Jonathan Swift
+            "On the Origin of Species, The World as Will and Representation", // Charles Darwin, Schopenhauer
+            "Relativity: The Special and the General Theory", // Einstein
+            "The Philosophy of Civilization", // Albert Schweitzer
+            "The Clouds", // Aristophanes
+            "The Story of My Experiments with Truth", // Mahatma Gandhi
+            "Dhammapada", // Gautama Buddha
+            "Analects", // Confucius
+            "Nightmare Abbey", // Thomas Love Peacock
+            "The Declaration of Independence", // Thomas Jefferson
+            "The Gettysburg Address", // Lincoln
+            "Common Sense", // Tom Paine
+            "The Prince", // Machiavelli
+            "The Bible" // Christ
+        };
+        Console.WriteLine("Please name a book you have written");
+        var answer = Console.ReadLine();
+        if (answer == books[author])
+        {
+            Console.WriteLine("yayy");
+        }
+        else 
+        {
+            Console.WriteLine("ew");
+        }
+        
     }
 }
