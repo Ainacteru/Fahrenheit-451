@@ -21,7 +21,7 @@ public class FahrenheitMain
         };
     static string[] authors = {
         "Jonathan Swift", 
-        "Charles Darwin, 
+        "Charles Darwin", 
         "Schopenhauer", 
         "Einstein", 
         "Albert Schweitzer", 
@@ -72,7 +72,8 @@ public class FahrenheitMain
     {
         for(int i = 0; i < authors.Length; i++){
             if (answer == authors[i]){
-                author = i;
+                author = i -1;
+                //Console.WriteLine(i);
                 return true;
             }
         }
@@ -111,9 +112,11 @@ public class FahrenheitMain
         else if (!limited) {
             
         }
+        
         Console.WriteLine("");
-        MoreAccess();
         Console.WriteLine("Type a command, type help for commands");
+        MoreAccess();
+        
     }
     
     static void MoreAccess()
@@ -132,7 +135,7 @@ public class FahrenheitMain
         }
     }
     
-    static void GetPermisions()
+    static void GetPermissions()
     {
         Console.WriteLine("I rise from the ashes, reborn anew, in a world of fire, where books are few a symbol of hope when all seems lost, I am reborn at any cost.");
         Console.WriteLine("Type...");
