@@ -1,0 +1,24 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '7.0'
+
+      - name: Build project
+        run: dotnet publish -c Release -o out
+
+      - name: Deploy to Render
+        run: curl -X POST https://api.render.com/deploy/some-render-api-url
