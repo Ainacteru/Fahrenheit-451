@@ -4,7 +4,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["MyWebAPI.csproj", "./"]
+COPY ["Farenheit.csproj", "./"]
 RUN dotnet restore "./Farenheit.csproj"
 COPY . .
 WORKDIR "/src/"
