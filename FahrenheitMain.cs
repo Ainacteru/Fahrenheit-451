@@ -130,7 +130,8 @@ public class FahrenheitMain
                 GetPermissions();
                 break;
             default:
-            Console.WriteLine("Type a command, type help for commands");
+            Console.WriteLine("Not a command, type help for a list of valid commands");
+            MoreAccess();
                 break;
         }
     }
@@ -144,6 +145,7 @@ public class FahrenheitMain
         {
             limited = false;
             Console.WriteLine("Permission Granted");
+            MoreAccess();
         }
         else {
             Console.WriteLine("Permission Denied");
@@ -154,6 +156,7 @@ public class FahrenheitMain
     static void GetHelp()
     {
         Console.WriteLine("help: opens this menu");
+        MoreAccess();
     }
     
     
