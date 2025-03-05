@@ -35,8 +35,23 @@ public class FahrenheitMain
     
     static bool checkForName(string answer)
     {
-        string[] authors = {"Jonathan Swift", 
-        "Charles Darwin, Schopenhauer", "Einstein", "Albert Schweitzer", "Aristophanes", "Mahatma Ghandi", "Gautama Buddha", "Confucius", "Thomas Love Peacock", "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"};
+        string[] authors = {
+            "Jonathan Swift", 
+            "Charles Darwin, 
+            "Schopenhauer", 
+            "Einstein", 
+            "Albert Schweitzer", 
+            "Aristophanes", 
+            "Mahatma Ghandi", 
+            "Gautama Buddha", 
+            "Confucius", 
+            "Thomas Love Peacock",
+            "Thomas Jefferson", 
+            "Lincoln", 
+            "Tom Paine", 
+            "Machiavelli", 
+            "Christ"
+        };
         
         for(int i = 0; i < authors.Length; i++){
             if (answer == authors[i]){
