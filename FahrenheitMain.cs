@@ -21,7 +21,7 @@ public class FahrenheitMain
         };
     static string[] authors = {
         "Jonathan Swift", 
-        "Charles Darwin",
+        "Charles Darwin, 
         "Schopenhauer", 
         "Einstein", 
         "Albert Schweitzer", 
@@ -36,7 +36,6 @@ public class FahrenheitMain
         "Machiavelli", 
         "Christ"
     };
-    
     static bool limited = true;
         
     public static void Main(string[] args)
@@ -97,16 +96,61 @@ public class FahrenheitMain
     
     static void ShowLimited()
     {
-        Console.WriteLine("Welcome " + authors[author] + "!");
+        Console.WriteLine("Welcome!");
         ListBooks();
     }
     
     static void ListBooks()
     {
-        
-        if (!limited) {
+        if(limited) {
+            Console.WriteLine("You can access 1 book(s)");
+            Console.WriteLine("");
+            Console.WriteLine(books[author].ToString());
             
         }
+        else if (!limited) {
+            
+        }
+        Console.WriteLine("");
+        MoreAccess();
+        Console.WriteLine("Type a command, type help for commands");
+    }
+    
+    static void MoreAccess()
+    {
+        var answer = Console.ReadLine();
+        switch (answer) {
+            case "help":
+                GetHelp();
+                break;
+            case "get permission":
+                GetPermissions();
+                break;
+            default:
+            Console.WriteLine("Type a command, type help for commands");
+                break;
+        }
+    }
+    
+    static void GetPermisions()
+    {
+        Console.WriteLine("I rise from the ashes, reborn anew, in a world of fire, where books are few a symbol of hope when all seems lost, I am reborn at any cost.");
+        Console.WriteLine("Type...");
+        
+        if (Console.ReadLine() == "Phoenix")
+        {
+            limited = false;
+            Console.WriteLine("Permission Granted");
+        }
+        else {
+            Console.WriteLine("Permission Denied");
+            MoreAccess();
+        }
+    }
+    
+    static void GetHelp()
+    {
+        Console.WriteLine("help: opens this menu");
     }
     
     
