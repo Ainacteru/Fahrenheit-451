@@ -10,7 +10,7 @@ public class FahrenheitMain
         
         switch(answer) {
             case "y":
-                a();
+                askForName();
                 break;
             default:
                 Console.WriteLine("why did you not press y or n, please restart the program");
@@ -19,19 +19,28 @@ public class FahrenheitMain
     
     }
     
-    public static void a()
+    public static void askForName()
     {
         Console.WriteLine("please enter your name");
         
         string answer = Console.ReadLine();
+        if (checkForName(answer)){
+            Console.WriteLine("yay");
+        }
+        else {
+            Console.WriteLine("ew");
+        }
+    }
+    
+    static boolean checkForName(string answer)
+    {
+        string[] authors = {"Jonathan Swift", "Charles Darwin, Schopenhauer", "Einstein", "Albert Schweitzer", "Aristophanes", "Mahatma Ghandi", "Gautama Buddha", "Confucius", "Thomas Love Peacock", "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"};
         
-        switch(answer) {
-            case "":
-                
-                break;
-            default:
-                a();
-                break;
-        } 
+        foreach (var writer in authors){
+            if (answer == writer){
+                return true;
+            }
+        }
+        return false;
     }
 }
