@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "Hash": "BW4iBfLM68QPon6READNXeO8RNviTcFM7exw35WG4pQ=",
+  "Source": "Farenheit",
+  "BasePath": "_content/Farenheit",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Farenheit/wwwroot",
+      "Source": "Farenheit",
+      "ContentRoot": "/Users/Gary/Coding/RaspberryPi/MyProject/Farenheit/wwwroot/",
+      "BasePath": "_content/Farenheit",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/Gary/Coding/RaspberryPi/MyProject/Farenheit/wwwroot/index.html",
+      "SourceId": "Farenheit",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/Gary/Coding/RaspberryPi/MyProject/Farenheit/wwwroot/",
+      "BasePath": "_content/Farenheit",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    }
+  ]
+}
