@@ -3,68 +3,7 @@ using System;
 public class FahrenheitMain
 {
     public static int author = 0;
-    public static void Main(string[] args)
-    {
-        Console.WriteLine("Welcome to my Farhenheit 451 thingy");
-        Console.WriteLine("Type y to say yes, n to say no, type y to continue");
-        string answer = Console.ReadLine();
-        
-        switch(answer) {
-            case "y":
-                askForName();
-                break;
-            default:
-                Console.WriteLine("ew");
-                break;
-        } 
-    
-    }
-    
-    public static void askForName()
-    {
-        Console.WriteLine("please enter your name");
-        
-        string answer = Console.ReadLine();
-        if (checkForName(answer)){
-            nameBook();
-        }
-        else {
-            Console.WriteLine("ew");
-        }
-    }
-    
-    static bool checkForName(string answer)
-    {
-        string[] authors = {
-            "Jonathan Swift", 
-            "Charles Darwin, 
-            "Schopenhauer", 
-            "Einstein", 
-            "Albert Schweitzer", 
-            "Aristophanes", 
-            "Mahatma Ghandi", 
-            "Gautama Buddha", 
-            "Confucius", 
-            "Thomas Love Peacock",
-            "Thomas Jefferson", 
-            "Lincoln", 
-            "Tom Paine", 
-            "Machiavelli", 
-            "Christ"
-        };
-        
-        for(int i = 0; i < authors.Length; i++){
-            if (answer == authors[i]){
-                author = i;
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    static void nameBook()
-    {
-        string[] books = {
+    static string[] books = {
             "Gulliver's Travels", // Jonathan Swift
             "On the Origin of Species, The World as Will and Representation", // Charles Darwin, Schopenhauer
             "Relativity: The Special and the General Theory", // Einstein
@@ -80,16 +19,99 @@ public class FahrenheitMain
             "The Prince", // Machiavelli
             "The Bible" // Christ
         };
-        Console.WriteLine("Please name a book you have written");
+    static string[] authors = {
+        "Jonathan Swift", 
+        "Charles Darwin",
+        "Schopenhauer", 
+        "Einstein", 
+        "Albert Schweitzer", 
+        "Aristophanes", 
+        "Mahatma Ghandi", 
+        "Gautama Buddha", 
+        "Confucius", 
+        "Thomas Love Peacock", 
+        "Thomas Jefferson", 
+        "Lincoln", 
+        "Tom Paine", 
+        "Machiavelli", 
+        "Christ"
+    };
+    
+    static bool limited = true;
+        
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Welcome to my Farhenheit 451 thingy");
+        Console.WriteLine("Type y to say yes, n to say no, type y to continue");
+        string answer = Console.ReadLine();
+        
+        switch(answer) {
+            case "y":
+                AskForName();
+                break;
+            default:
+                Denied();
+                break;
+        } 
+    
+    }
+    
+    public static void AskForName()
+    {
+        Console.WriteLine("please enter your name");
+        
+        string answer = Console.ReadLine();
+        if (CheckForName(answer)){
+            NameBook();
+        }
+        else {
+            Denied();
+        }
+    }
+    
+    static bool CheckForName(string answer)
+    {
+        for(int i = 0; i < authors.Length; i++){
+            if (answer == authors[i]){
+                author = i;
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    static void NameBook()
+    {
+        Console.WriteLine("Please name your assigned title");
         var answer = Console.ReadLine();
         if (answer == books[author])
         {
-            Console.WriteLine("yayy");
+           ShowLimited();
         }
         else if (answer != books[author])
         {
-            Console.WriteLine("ew");
+           Denied();
         }
         
+    }
+    
+    static void ShowLimited()
+    {
+        Console.WriteLine("Welcome " + authors[author] + "!");
+        ListBooks();
+    }
+    
+    static void ListBooks()
+    {
+        
+        if (!limited) {
+            
+        }
+    }
+    
+    
+    static void Denied()
+    {
+        Console.WriteLine("Access Denied");
     }
 }
