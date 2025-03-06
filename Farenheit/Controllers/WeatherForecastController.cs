@@ -33,6 +33,8 @@ namespace Fahrenheit451API.Controllers
             "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"
         };
 
+        int step = 0;
+
         [HttpPost]
         public IActionResult Respond([FromBody] UserInput input)
         {
@@ -42,7 +44,7 @@ namespace Fahrenheit451API.Controllers
 
         private string ProcessInput(string input)
         {
-            int step = 0;
+
             if (!access) {
                 switch (input.ToLower())
                 {
@@ -64,7 +66,7 @@ namespace Fahrenheit451API.Controllers
                 }
             }
             else {
-                return "no access";
+                return "access";
             }
         }
 
@@ -72,7 +74,7 @@ namespace Fahrenheit451API.Controllers
         {
             for (int i = 0; i < authors.Length; i++)
             {
-                if (input.Equals(authors[i], StringComparison.OrdinalIgnoreCase))
+                if (input == authors[i])
                 {
                     author = i;
                     return true;
