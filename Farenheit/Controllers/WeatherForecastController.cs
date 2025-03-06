@@ -88,7 +88,7 @@ public class InteractionController : ControllerBase
 
         private bool CheckForName(string answer)
         {
-            for (var i = 0; i < authors.Length; i++)
+            for (int i = 0; i < authors.Length; i++)
             {
                 if (answer == authors[i])
                 {
