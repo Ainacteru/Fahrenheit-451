@@ -24,7 +24,7 @@ namespace Fahrenheit451API.Controllers
 
         static bool limited = true;
 
-        [HttpPost("respond")]
+        [HttpPost]
         public ActionResult Respond([FromBody] UserInput userInput)
         {
             string response = "";
