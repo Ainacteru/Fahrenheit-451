@@ -87,11 +87,11 @@ public class InteractionController : ControllerBase
 
         private bool CheckForName(string answer)
         {
-            for (int i = 0; i < authors.Length; i++)
+            foreach (var writers in authors)
             {
-                if (answer == authors[i])
+                if (answer == writers)
                 {
-                    author = i;
+                    author = writers;
                     return true;
                 }
             }
