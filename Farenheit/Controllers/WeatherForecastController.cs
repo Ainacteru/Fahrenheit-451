@@ -9,6 +9,7 @@ public class InteractionController : ControllerBase
     public static int author = 0;
     static string[] books = {
             "Gulliver's Travels", // Jonathan Swift
+            "On the Origin of Species, The World as Will and Representation", // Charles Darwin, //  Schopenhauer
             "On the Origin of Species, The World as Will and Representation", // Charles Darwin, Schopenhauer
             "Relativity: The Special and the General Theory", // Einstein
             "The Philosophy of Civilization", // Albert Schweitzer
@@ -59,20 +60,26 @@ public class InteractionController : ControllerBase
         public ActionResult Respond([FromBody] UserInput userInput)
         {
             string response = "Welcome to my Farhenheit 451 thingy";
+            int progression = 0;
 
-            if (userInput.Text.ToLower() == "y")
+            if ((userInput.Text == "continue") && (progression == 0))
             {
                 response = "Please enter your name.";
+                progression++;
             }
-            else if (CheckForName(userInput.Text))
+            else if((progression == 1) && CheckForName(userInput.Text)) 
             {
                 response = "Please name your assigned title.";
+                progression++;
+            }
+            else if((progression == 2) && CheckForBook(userInput.Text))
+            {
+                response = "next part frfr";
+                progression++;
             }
             else
             {
-                response = "Access Denied.";
-                //return Forbidden(new {response});
-
+                response = "not a valid command";
             }
 
             return Ok(new { response });
@@ -89,6 +96,20 @@ public class InteractionController : ControllerBase
                 }
             }
             return false;
+        }
+
+        private bool CheckForBook(string answer)
+        {
+
+            if (answer == books[author])
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
+                
         }
 
 }
