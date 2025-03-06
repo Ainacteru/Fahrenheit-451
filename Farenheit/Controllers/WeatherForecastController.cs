@@ -42,6 +42,7 @@ public class InteractionController : ControllerBase
         "Christ"
     };
     static bool limited = true;
+    int progression = 0;
         
 
     // [HttpPost]
@@ -60,7 +61,7 @@ public class InteractionController : ControllerBase
         public ActionResult Respond([FromBody] UserInput userInput)
         {
             string response = "Welcome to my Farhenheit 451 thingy";
-            int progression = 0;
+            
 
             if ((progression == 0) && (userInput.Text == "continue"))
             {
