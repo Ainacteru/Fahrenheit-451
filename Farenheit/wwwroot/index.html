@@ -40,7 +40,7 @@
         #userInput {
             background: transparent;
             border: none;
-            color: #fff;
+            color: #0f0;
             font-size: 16px;
             padding: 5px;
             outline: none;
@@ -62,7 +62,7 @@
             const outputDiv = document.getElementById("response");
             outputDiv.innerHTML += `<div class="output prompt">> ${userText}</div>`;
 
-            let response = await fetch("https://farenheit-451.onrender.com/api/respond", { // Update the URL accordingly
+            let response = await fetch("https://farenheit-451.onrender.com/api/respond", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text: userText })
