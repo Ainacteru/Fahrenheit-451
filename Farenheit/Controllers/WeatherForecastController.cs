@@ -62,7 +62,7 @@ public class InteractionController : ControllerBase
             string response = "Welcome to my Farhenheit 451 thingy";
             int progression = 0;
 
-            if ((userInput.Text == "continue") && (progression == 0))
+            if ((progression == 0) && (userInput.Text == "continue"))
             {
                 response = "Please enter your name.";
                 progression++;
