@@ -5,23 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interact with C# API</title>
     <style>
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #2e2e2e;
-            color: #fff;
+        body, html {
             margin: 0;
             padding: 0;
+            height: 100%;
+            background-color: #2e2e2e;
+            font-family: 'Ubuntu Mono', monospace;
+            overflow: hidden; /* Hide global scrollbars */
         }
 
         .terminal {
-            width: 80%;
-            margin: 50px auto;
-            background-color: #111;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
-            height: 400px;
-            overflow-y: auto;
+            background-color: #111;
+            color: #fff;
+            overflow-y: scroll; /* Allow vertical scrolling */
+            box-sizing: border-box;
         }
 
         .output {
@@ -30,45 +32,38 @@
             margin-bottom: 10px;
         }
 
-        #userInput {
+        .prompt {
+            color: #0f0;
+            display: inline-block;
+        }
+
+        .input-box {
             background: transparent;
             border: none;
             color: #fff;
             font-size: 16px;
-            width: 90%;
+            width: calc(100% - 30px); /* Make sure it fits next to the prompt */
             padding: 5px;
             outline: none;
+            caret-color: #0f0; /* Green caret (cursor) */
+            display: inline-block;
         }
 
-        #userInput:focus {
+        .input-box:focus {
             border-bottom: 2px solid #0f0;
         }
 
-        button {
-            background-color: #0f0;
-            border: none;
-            padding: 8px 16px;
-            color: #000;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        button:hover {
-            background-color: #0b0;
-        }
-
-        .prompt {
-            color: #0f0;
-        }
     </style>
     <script>
-        async function sendInput() {
-            let userText = document.getElementById("userInput").value;
+        async function sendInput(inputField) {
+            let userText = inputField.value;
             if (!userText) return;
 
             const outputDiv = document.getElementById("response");
-            outputDiv.innerHTML += `<div class="output prompt">> ${userText}</div>`;
+            const newOutput = document.createElement("div");
+            newOutput.classList.add("output");
+            newOutput.innerHTML = `<span class="prompt">> </span>${userText}`;
+            outputDiv.appendChild(newOutput);
 
             let response = await fetch("https://farenheit-451.onrender.com/api/respond", {
                 method: "POST",
@@ -77,18 +72,58 @@
             });
             let data = await response.json();
 
-            outputDiv.innerHTML += `<div class="output">${data.response}</div>`;
-            document.getElementById("userInput").value = ""; // Clear input after submitting
-            outputDiv.scrollTop = outputDiv.scrollHeight; // Auto-scroll to the bottom
+            const responseDiv = document.createElement("div");
+            responseDiv.classList.add("output");
+            responseDiv.innerHTML = data.response;
+            outputDiv.appendChild(responseDiv);
+
+            // Clear the current input field
+            inputField.value = "";
+            
+            // Create the next prompt and input field
+            const newPromptDiv = document.createElement("div");
+            newPromptDiv.classList.add("output");
+            newPromptDiv.innerHTML = `<span class="prompt">> </span>`;
+            const newInputField = document.createElement("input");
+            newInputField.classList.add("input-box");
+            newInputField.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    sendInput(newInputField);
+                }
+            });
+
+            newPromptDiv.appendChild(newInputField);
+            outputDiv.appendChild(newPromptDiv);
+
+            // Auto-scroll to the bottom
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+            newInputField.focus();
         }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const firstInputField = document.createElement("input");
+            firstInputField.classList.add("input-box");
+            firstInputField.addEventListener("keydown", (event) => {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    sendInput(firstInputField);
+                }
+            });
+
+            const firstPromptDiv = document.createElement("div");
+            firstPromptDiv.classList.add("output");
+            firstPromptDiv.innerHTML = `<span class="prompt">> </span>`;
+            firstPromptDiv.appendChild(firstInputField);
+
+            document.getElementById("response").appendChild(firstPromptDiv);
+            firstInputField.focus();
+        });
     </script>
 </head>
 <body>
     <div class="terminal">
         <div id="response"></div>
-        <div class="output prompt">> </div>
-        <input type="text" id="userInput" placeholder="Type something...">
-        <button onclick="sendInput()">Submit</button>
     </div>
 </body>
 </html>
