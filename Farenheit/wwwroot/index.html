@@ -46,6 +46,7 @@
             outline: none;
             caret-color: #0f0; /* Green caret (cursor) */
             width: 100%; /* Allow input to take available space */
+            user-select: none; /* Prevent text selection */
         }
 
         .prompt {
@@ -90,7 +91,16 @@
                     userInput.value = "";
                 }
             });
+
+            // Prevent the input from being deselected (always focus)
+            setInterval(() => {
+                if (document.activeElement !== userInput) {
+                    userInput.focus();
+                }
+            }, 100); // Every 100ms, check if the input is focused
         });
+
+        
     </script>
 </head>
 <body>

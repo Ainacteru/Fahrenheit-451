@@ -71,6 +71,8 @@ public class InteractionController : ControllerBase
             else
             {
                 response = "Access Denied.";
+                return Forbidden(new {response});
+                
             }
 
             return Ok(new { response });
