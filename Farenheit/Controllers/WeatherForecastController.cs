@@ -38,11 +38,16 @@ namespace Fahrenheit451API.Controllers
         [HttpPost]
         public IActionResult Respond([FromBody] UserInput input)
         {
-            string response = ProcessInput(input.Text);
+            int step = HttpContext.Session.GetInt32("step") ?? 0;
+
+            string response = ProcessInput(input.Text, ref step);
+
+            HttpContext.Session.SetInt32("step", step);  // Store updated step
+
             return Ok(new { response });
         }
 
-        private string ProcessInput(string input)
+        private string ProcessInput(string input, ref int step)
         {
             if (!access) 
             {
@@ -68,9 +73,12 @@ namespace Fahrenheit451API.Controllers
                         if (CheckForBook(input.ToLower())) 
                         {
                             step++;
-                            return "Yayy! Access granted.";
+                            return "Access granted. You can access 1 book(s)";
                         }
                         return "Incorrect title. Try again.";
+                    default:
+                    return "Access Denied";
+
                 }
             }
             
@@ -81,7 +89,7 @@ namespace Fahrenheit451API.Controllers
         {
             for (int i = 0; i < authors.Length; i++)
             {
-                if (input == authors[i])
+                if (input == authors[i].ToLower())
                 {
                     author = i;
                     return true;
@@ -92,7 +100,7 @@ namespace Fahrenheit451API.Controllers
 
         private bool CheckForBook(string input)
         {
-            if (input == books[author]) {
+            if (input == books[author].ToLower()) {
                 return true;
             }
             else {
