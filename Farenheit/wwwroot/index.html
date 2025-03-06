@@ -5,7 +5,7 @@
     <script>
         async function sendInput() {
             let userText = document.getElementById("userInput").value;
-            let response = await fetch("http://localhost:5077/api/respond", {
+            let response = await fetch("https://farenheit-451.onrender.com/api/respond", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text: userText })
