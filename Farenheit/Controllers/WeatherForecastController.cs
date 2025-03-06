@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualBasic;
 
 namespace Farenheit.Controllers;
 
@@ -7,6 +6,43 @@ namespace Farenheit.Controllers;
 [Route("api/respond")]
 public class InteractionController : ControllerBase
 {
+    public static int author = 0;
+    static string[] books = {
+            "Gulliver's Travels", // Jonathan Swift
+            "On the Origin of Species, The World as Will and Representation", // Charles Darwin, Schopenhauer
+            "Relativity: The Special and the General Theory", // Einstein
+            "The Philosophy of Civilization", // Albert Schweitzer
+            "The Clouds", // Aristophanes
+            "The Story of My Experiments with Truth", // Mahatma Gandhi
+            "Dhammapada", // Gautama Buddha
+            "Analects", // Confucius
+            "Nightmare Abbey", // Thomas Love Peacock
+            "The Declaration of Independence", // Thomas Jefferson
+            "The Gettysburg Address", // Lincoln
+            "Common Sense", // Tom Paine
+            "The Prince", // Machiavelli
+            "The Bible" // Christ
+        };
+    static string[] authors = {
+        "Jonathan Swift", 
+        "Charles Darwin", 
+        "Schopenhauer", 
+        "Einstein", 
+        "Albert Schweitzer", 
+        "Aristophanes", 
+        "Mahatma Ghandi", 
+        "Gautama Buddha", 
+        "Confucius", 
+        "Thomas Love Peacock", 
+        "Thomas Jefferson", 
+        "Lincoln", 
+        "Tom Paine", 
+        "Machiavelli", 
+        "Christ"
+    };
+    static bool limited = true;
+        
+
     // [HttpPost]
     // public IActionResult Respond([FromBody] UserInput input)
     // {
