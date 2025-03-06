@@ -1,96 +1,75 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Farenheit.Controllers;
-
-[ApiController]
-[Route("api/respond")]
-public class InteractionController : ControllerBase
+namespace Fahrenheit451API.Controllers
 {
-    public static int author = 0;
-    static string[] books = {
-            "Gulliver's Travels", // Jonathan Swift
-            "On the Origin of Species, The World as Will and Representation", // Charles Darwin, //  Schopenhauer
-            "On the Origin of Species, The World as Will and Representation", // Charles Darwin, Schopenhauer
-            "Relativity: The Special and the General Theory", // Einstein
-            "The Philosophy of Civilization", // Albert Schweitzer
-            "The Clouds", // Aristophanes
-            "The Story of My Experiments with Truth", // Mahatma Gandhi
-            "Dhammapada", // Gautama Buddha
-            "Analects", // Confucius
-            "Nightmare Abbey", // Thomas Love Peacock
-            "The Declaration of Independence", // Thomas Jefferson
-            "The Gettysburg Address", // Lincoln
-            "Common Sense", // Tom Paine
-            "The Prince", // Machiavelli
-            "The Bible" // Christ
-        };
-    static string[] authors = {
-        "Jonathan Swift", 
-        "Charles Darwin", 
-        "Schopenhauer", 
-        "Einstein", 
-        "Albert Schweitzer", 
-        "Aristophanes", 
-        "Mahatma Ghandi", 
-        "Gautama Buddha", 
-        "Confucius", 
-        "Thomas Love Peacock", 
-        "Thomas Jefferson", 
-        "Lincoln", 
-        "Tom Paine", 
-        "Machiavelli", 
-        "Christ"
-    };
-    static bool limited = true;
-    int progression = 0;
+    [ApiController]
+    [Route("api/respond")]
+    public class FahrenheitController : ControllerBase
+    {
+        private static int author = 0;
+        private static bool limited = true;
         
+        private static readonly string[] books = {
+            "Gulliver's Travels",
+            "On the Origin of Species", 
+            "The World as Will and Representation",
+            "Relativity: The Special and the General Theory",
+            "The Philosophy of Civilization",
+            "The Clouds",
+            "The Story of My Experiments with Truth",
+            "Dhammapada",
+            "Analects",
+            "Nightmare Abbey",
+            "The Declaration of Independence",
+            "The Gettysburg Address",
+            "Common Sense",
+            "The Prince",
+            "The Bible"
+        };
 
-    // [HttpPost]
-    // public IActionResult Respond([FromBody] UserInput input)
-    // {
-    //     string response = ProcessInput(input.Text);
-    //     return Ok(new { response });
-    // }
-    // private string ProcessInput(string text)
-    // {
-    //     // Replace this with your existing logic
-    //     return "You said: " + text;
-    // }
+        private static readonly string[] authors = {
+            "Jonathan Swift", "Charles Darwin", "Schopenhauer", "Einstein", "Albert Schweitzer",
+            "Aristophanes", "Mahatma Gandhi", "Gautama Buddha", "Confucius", "Thomas Love Peacock",
+            "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"
+        };
 
-    [HttpPost]
-        public ActionResult Respond([FromBody] UserInput userInput)
+        [HttpPost]
+        public IActionResult Respond([FromBody] UserInput input)
         {
-            string response = "Welcome to my Farhenheit 451 thingy";
-            
-
-            if ((progression == 0) && (userInput.Text == "continue"))
-            {
-                progression++;
-                response = progression.ToString();  
-            }
-            else if((progression == 1) && CheckForName(userInput.Text)) 
-            {
-                response = "Please name your assigned title.";
-                progression++;
-            }
-            else if((progression == 2) && CheckForBook(userInput.Text))
-            {
-                response = "next part frfr";
-                progression++;
-            }
-            else
-            {
-                response = "not a valid command";
-            }
-
+            string response = ProcessInput(input.Text);
             return Ok(new { response });
         }
 
-        private bool CheckForName(string answer)
+        private string ProcessInput(string input)
+        {
+            switch (input.ToLower())
+            {
+                case "y":
+                    return "Please enter your name:";
+                case "n":
+                    return "Access Denied.";
+                case "help":
+                    return "Commands: help, get permission";
+                case "get permission":
+                    return "I rise from the ashes, reborn anew, in a world of fire, where books are few. Type 'Phoenix' to gain access.";
+                case "phoenix":
+                    limited = false;
+                    return "Permission Granted.";
+                default:
+                    if (CheckForName(input))
+                        return "Please name your assigned title:";
+                    else if (limited)
+                        return "Access limited. Type 'help' for commands.";
+                    else
+                        return "Access Denied.";
+            }
+        }
+
+        private bool CheckForName(string input)
         {
             for (int i = 0; i < authors.Length; i++)
             {
-                if (answer == authors[i])
+                if (input.Equals(authors[i], StringComparison.OrdinalIgnoreCase))
                 {
                     author = i;
                     return true;
@@ -99,23 +78,9 @@ public class InteractionController : ControllerBase
             return false;
         }
 
-        private bool CheckForBook(string answer)
+        public class UserInput
         {
-
-            if (answer == books[author])
-            {
-                return true;
-            }
-            else 
-            {
-                return false;
-            }
-                
+            public required string Text { get; set; }
         }
-
-}
-
-public class UserInput
-{
-    public required string Text { get; set; }
+    }
 }
