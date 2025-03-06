@@ -92,7 +92,7 @@ public class InteractionController : ControllerBase
             {
                 if (answer == authors[i])
                 {
-                    author = authors[i];
+                    author = i;
                     return true;
                 }
             }
