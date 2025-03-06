@@ -1,33 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using Microsoft.VisualBasic;
 
-namespace Fahrenheit451API.Controllers
+namespace Farenheit.Controllers;
+
+[ApiController]
+[Route("api/respond")]
+public class InteractionController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class InteractionController : ControllerBase
-    {
-        static int author = 0;
-        static string[] books = {
-            "Gulliver's Travels", "On the Origin of Species, The World as Will and Representation",
-            "Relativity: The Special and the General Theory", "The Philosophy of Civilization", 
-            "The Clouds", "The Story of My Experiments with Truth", "Dhammapada", "Analects",
-            "Nightmare Abbey", "The Declaration of Independence", "The Gettysburg Address", 
-            "Common Sense", "The Prince", "The Bible"
-        };
+    // [HttpPost]
+    // public IActionResult Respond([FromBody] UserInput input)
+    // {
+    //     string response = ProcessInput(input.Text);
+    //     return Ok(new { response });
+    // }
+    // private string ProcessInput(string text)
+    // {
+    //     // Replace this with your existing logic
+    //     return "You said: " + text;
+    // }
 
-        static string[] authors = {
-            "Jonathan Swift", "Charles Darwin", "Schopenhauer", "Einstein", "Albert Schweitzer",
-            "Aristophanes", "Mahatma Gandhi", "Gautama Buddha", "Confucius", "Thomas Love Peacock",
-            "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"
-        };
-
-        static bool limited = true;
-
-        [HttpPost]
+    [HttpPost]
         public ActionResult Respond([FromBody] UserInput userInput)
         {
-            string response = "";
+            string response = "Welcome to my Farhenheit 451 thingy";
 
             if (userInput.Text.ToLower() == "y")
             {
@@ -57,10 +52,10 @@ namespace Fahrenheit451API.Controllers
             }
             return false;
         }
-    }
 
-    public class UserInput
-    {
-        public string Text { get; set; }
-    }
+}
+
+public class UserInput
+{
+    public required string Text { get; set; }
 }
