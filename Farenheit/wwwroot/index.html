@@ -35,6 +35,7 @@
         .input-container {
             display: flex;
             align-items: center;
+            position: relative; /* Keep the input field in place */
         }
 
         #userInput {
@@ -47,9 +48,6 @@
             caret-color: transparent; /* Hide the cursor */
             width: 100%; /* Allow input to take available space */
             user-select: none; /* Prevent text selection */
-            position: absolute; /* Positioning to keep input box always focused */
-            top: 100%; /* Align the input below the output */
-            left: 0;
         }
 
         .prompt {
