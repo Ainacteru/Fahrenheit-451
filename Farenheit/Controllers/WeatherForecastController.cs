@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualBasic;
 
 namespace Farenheit.Controllers;
 
@@ -12,12 +13,195 @@ public class InteractionController : ControllerBase
         string response = ProcessInput(input.Text);
         return Ok(new { response });
     }
-
     private string ProcessInput(string text)
     {
         // Replace this with your existing logic
         return "You said: " + text;
     }
+
+    [HttpPost]
+    public IActionResult Output(string input)    
+    {
+        string answer = input;
+
+        return Ok(new { answer });
+    }
+    public required string answer;
+    public string Input() {
+        return answer;
+    }
+
+    public void getInput([FromBody] UserInput input)
+    {
+        answer = input.Text;
+    }
+
+
+    
+    public int author = 0;
+    string[] books = {
+            "Gulliver's Travels", // Jonathan Swift
+            "On the Origin of Species, The World as Will and Representation", // Charles Darwin, Schopenhauer
+            "Relativity: The Special and the General Theory", // Einstein
+            "The Philosophy of Civilization", // Albert Schweitzer
+            "The Clouds", // Aristophanes
+            "The Story of My Experiments with Truth", // Mahatma Gandhi
+            "Dhammapada", // Gautama Buddha
+            "Analects", // Confucius
+            "Nightmare Abbey", // Thomas Love Peacock
+            "The Declaration of Independence", // Thomas Jefferson
+            "The Gettysburg Address", // Lincoln
+            "Common Sense", // Tom Paine
+            "The Prince", // Machiavelli
+            "The Bible" // Christ
+        };
+    string[] authors = {
+        "Jonathan Swift", 
+        "Charles Darwin", 
+        "Schopenhauer", 
+        "Einstein", 
+        "Albert Schweitzer", 
+        "Aristophanes", 
+        "Mahatma Ghandi", 
+        "Gautama Buddha", 
+        "Confucius", 
+        "Thomas Love Peacock", 
+        "Thomas Jefferson", 
+        "Lincoln", 
+        "Tom Paine", 
+        "Machiavelli", 
+        "Christ"
+    };
+    bool limited = true;
+        
+    public void start(string[] args)
+    {
+        Console.WriteLine("Welcome to my Farhenheit 451 thingy");
+        Console.WriteLine("Type y to say yes, n to say no, type y to continue");
+        string answer = Input();
+        
+        switch(answer) {
+            case "y":
+                AskForName();
+                break;
+            default:
+                Denied();
+                break;
+        } 
+    
+    }
+    
+    public void AskForName()
+    {
+        Console.WriteLine("please enter your name");
+        
+        string answer = Input();
+        if (CheckForName(answer)){
+            NameBook();
+        }
+        else {
+            Denied();
+        }
+    }
+    
+    bool CheckForName(string answer)
+    {
+        for(int i = 0; i < authors.Length; i++){
+            if (answer == authors[i]){
+                author = i -1;
+                //Console.WriteLine(i);
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    void NameBook()
+    {
+        Console.WriteLine("Please name your assigned title");
+        var answer = Console.ReadLine();
+        if (answer == books[author])
+        {
+           ShowLimited();
+        }
+        else if (answer != books[author])
+        {
+           Denied();
+        }
+        
+    }
+    
+    void ShowLimited()
+    {
+        Console.WriteLine("Welcome!");
+        ListBooks();
+    }
+    
+    void ListBooks()
+    {
+        if(limited) {
+            Console.WriteLine("You can access 1 book(s)");
+            Console.WriteLine("");
+            Console.WriteLine(books[author].ToString());
+            
+        }
+        else if (!limited) {
+            
+        }
+        
+        Console.WriteLine("");
+        Console.WriteLine("Type a command, type help for commands");
+        MoreAccess();
+        
+    }
+    
+    void MoreAccess()
+    {
+        var answer = Console.ReadLine();
+        switch (answer) {
+            case "help":
+                GetHelp();
+                break;
+            case "get permission":
+                GetPermissions();
+                break;
+            default:
+            Console.WriteLine("Not a command, type help for a list of valid commands");
+            MoreAccess();
+                break;
+        }
+    }
+    
+    void GetPermissions()
+    {
+        Console.WriteLine("I rise from the ashes, reborn anew, in a world of fire, where books are few a symbol of hope when all seems lost, I am reborn at any cost.");
+        Console.WriteLine("Type...");
+        
+        if (Console.ReadLine() == "Phoenix")
+        {
+            limited = false;
+            Console.WriteLine("Permission Granted");
+            MoreAccess();
+        }
+        else {
+            Console.WriteLine("Permission Denied");
+            MoreAccess();
+        }
+    }
+    
+    void GetHelp()
+    {
+        Console.WriteLine("help: opens this menu");
+        MoreAccess();
+    }
+    
+    
+    void Denied()
+    {
+        Console.WriteLine("Access Denied");
+    }
+
+
 }
 
 public class UserInput
