@@ -44,9 +44,12 @@
             font-size: 16px;
             padding: 5px;
             outline: none;
-            caret-color: #0f0; /* Green caret (cursor) */
+            caret-color: transparent; /* Hide the cursor */
             width: 100%; /* Allow input to take available space */
             user-select: none; /* Prevent text selection */
+            position: absolute; /* Positioning to keep input box always focused */
+            top: 100%; /* Align the input below the output */
+            left: 0;
         }
 
         .prompt {
@@ -55,7 +58,7 @@
         }
 
     </style>
-       <script>
+    <script>
         async function sendInput() {
             let userText = document.getElementById("userInput").value;
             if (!userText) return;
@@ -99,8 +102,6 @@
                 }
             }, 100); // Every 100ms, check if the input is focused
         });
-
-        
     </script>
 </head>
 <body>
@@ -108,7 +109,7 @@
         <div id="response"></div>
         <div class="input-container">
             <div class="prompt">></div>
-            <input type="text" id="userInput">
+            <input type="text" id="userInput" placeholder="Type your command...">
         </div>
     </div>
 </body>
