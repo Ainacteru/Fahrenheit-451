@@ -8,7 +8,7 @@ namespace Fahrenheit451API.Controllers
     {
         private static int author = 0;
         private static bool limited = true;
-        
+        private static bool access = false;
         private static readonly string[] books = {
             "Gulliver's Travels",
             "On the Origin of Species", 
@@ -42,26 +42,29 @@ namespace Fahrenheit451API.Controllers
 
         private string ProcessInput(string input)
         {
-            switch (input.ToLower())
-            {
-                case "y":
-                    return "Please enter your name:";
-                case "n":
-                    return "Access Denied.";
-                case "help":
-                    return "Commands: help, get permission";
-                case "get permission":
-                    return "I rise from the ashes, reborn anew, in a world of fire, where books are few. Type 'Phoenix' to gain access.";
-                case "phoenix":
-                    limited = false;
-                    return "Permission Granted.";
-                default:
-                    if (CheckForName(input))
-                        return "Please name your assigned title:";
-                    else if (limited)
-                        return "Access limited. Type 'help' for commands.";
-                    else
-                        return "Access Denied.";
+            int step = 0;
+            if (!access) {
+                switch (input.ToLower())
+                {
+                    case "y":
+                        step++;
+                        return "Please enter your name:";
+                    default:
+                        if(step == 1 && CheckForName(input.ToLower())) {
+                            step++;
+                            return "Please enter your assigned title:";
+                        }
+                        else if(step == 2 && CheckForBook(input.ToLower())) {
+                            step++;
+                            return "yayy";
+                        }
+                        else {
+                            return "Access Denied.";
+                        }
+                }
+            }
+            else {
+                return "no access";
             }
         }
 
@@ -77,6 +80,17 @@ namespace Fahrenheit451API.Controllers
             }
             return false;
         }
+
+        private bool CheckForBook(string input)
+        {
+            if (input == books[author]) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
 
         public class UserInput
         {
