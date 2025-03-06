@@ -65,8 +65,8 @@ public class InteractionController : ControllerBase
 
             if ((progression == 0) && (userInput.Text == "continue"))
             {
-                response = progression.ToString();
                 progression++;
+                response = progression.ToString();  
             }
             else if((progression == 1) && CheckForName(userInput.Text)) 
             {
