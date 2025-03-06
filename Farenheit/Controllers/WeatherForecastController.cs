@@ -44,30 +44,37 @@ namespace Fahrenheit451API.Controllers
 
         private string ProcessInput(string input)
         {
-
-            if (!access) {
-                switch (input.ToLower())
+            if (!access) 
+            {
+                switch (step) 
                 {
-                    case "y":
-                        step++;
-                        return "Please enter your name:";
-                    default:
-                        if(step == 1 && CheckForName(input.ToLower())) {
+                    case 0:
+                        if (input.ToLower() == "y") 
+                        {
+                            step++;
+                            return "Please enter your name:";
+                        }
+                        return "Access Denied.";
+
+                    case 1:
+                        if (CheckForName(input.ToLower())) 
+                        {
                             step++;
                             return "Please enter your assigned title:";
                         }
-                        else if(step == 2 && CheckForBook(input.ToLower())) {
+                        return "Invalid name. Try again.";
+
+                    case 2:
+                        if (CheckForBook(input.ToLower())) 
+                        {
                             step++;
-                            return "yayy";
+                            return "Yayy! Access granted.";
                         }
-                        else {
-                            return "Access Denied.";
-                        }
+                        return "Incorrect title. Try again.";
                 }
             }
-            else {
-                return "access";
-            }
+            
+            return "Access granted.";
         }
 
         private bool CheckForName(string input)
