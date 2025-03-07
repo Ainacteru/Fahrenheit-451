@@ -134,15 +134,19 @@ namespace Fahrenheit451API.Controllers
 
         private string GetHelp()
         {
+            string additionalStuff;
             if (limited)
             {
-                return "Available commands:\n" + 
-                        "help - Opens this menu\n" +
-                        "get permission - Request additional access\n";
+                additionalStuff = "get permission - Request additional access\n";
+            }
+            else {
+                additionalStuff = "";
             }
 
             return "Available commands:\n" + 
-                    "help - Opens this menu\n";
+                        "help - Opens this menu\n" +
+                        "books - Lists all books you have access to/n" +
+                        additionalStuff;
         }
 
         private bool CheckForName(string input)
