@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Fahrenheit451API.Controllers
 {
     [ApiController]
-    [Route("api/respond")]
+    [Route("api\respond")]
     public class FahrenheitController : ControllerBase
     {
         private static int author = 0;
@@ -41,7 +41,7 @@ namespace Fahrenheit451API.Controllers
 
             string response = ProcessInput(input.Text, ref step);
 
-            HttpContext.Session.SetInt32("step", step);  // Store updated step
+            HttpContext.Session.SetInt32("step", step);  \\ Store updated step
 
             return Ok(new { response });
         }
@@ -114,9 +114,9 @@ namespace Fahrenheit451API.Controllers
 
         private string AvailableBooks(){
             if (limited) {
-                return "You have access to 1 book(s):/n" + books[author];
+                return "You have access to 1 book(s):\n" + books[author];
             }
-            return "you have access to 14 book(s):/n" + string.Join("/n", books);
+            return "you have access to 14 book(s):\n" + string.Join("\n", books);
 
         }
 
