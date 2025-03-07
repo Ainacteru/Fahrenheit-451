@@ -66,6 +66,8 @@ namespace Fahrenheit451API.Controllers
                             step++;
                             return "Please enter your assigned title:";
                         }
+                        else if (input.ToLower() == "ari") {return "ew";}
+                        
                         return "Invalid name. Try again.";
 
                     case 2:
@@ -145,7 +147,7 @@ namespace Fahrenheit451API.Controllers
 
             return "Available commands:\n" + 
                         "help - Opens this menu\n" +
-                        "books - Lists all books you have access to/n" +
+                        "books - Lists all books available to you/n" +
                         additionalStuff;
         }
 
