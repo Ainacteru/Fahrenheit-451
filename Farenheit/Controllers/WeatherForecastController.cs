@@ -47,7 +47,7 @@ namespace Fahrenheit451API.Controllers
 
             string response = ProcessInput(input.Text, ref step);
 
-            HttpContext.Session.SetInt32("step", step);  \\ Store updated step
+            HttpContext.Session.SetInt32("step", step);  // Store updated step
 
             return Ok(new { response });
         }
