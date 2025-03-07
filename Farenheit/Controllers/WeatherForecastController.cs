@@ -52,14 +52,15 @@ namespace Fahrenheit451API.Controllers
             return Ok(new { response });
         }
 
-        private string ProcessInput(string input, ref int step)
+        private string ProcessInput(string answer, ref int step)
         {
+            string input = answer.ToLower();
             if (!access) 
             {
                 switch (step) 
                 {
                     case 0:
-                        if (input.ToLower() == "continue") 
+                        if (input == "continue") 
                         {
                             step++;
                             return "Please enter your name:";
@@ -67,17 +68,17 @@ namespace Fahrenheit451API.Controllers
                         return "Access Denied.";
 
                     case 1:
-                        if (CheckForName(input.ToLower())) 
+                        if (CheckForName(input)) 
                         {
                             step++;
                             return "Please enter your assigned title:";
                         }
-                        else if (input.ToLower() == "ari") {return "ew";}
+                        else if (input == "ari") {return "ew";}
                         
                         return "Invalid name. Try again.";
 
                     case 2:
-                        if (CheckForBook(input.ToLower())) 
+                        if (CheckForBook(input)) 
                         {
                             step++;
                             access = true;
@@ -91,7 +92,7 @@ namespace Fahrenheit451API.Controllers
             }
             else if (limited) {
                 
-                switch (input.ToLower())
+                switch (input)
                 {
                     case "help":
                         return GetHelp();
@@ -100,7 +101,7 @@ namespace Fahrenheit451API.Controllers
                     case "books":
                         return AvailableBooks();
                     default:
-                        if (isFullPermissionGranted(input.ToLower())) {
+                        if (isFullPermissionGranted(input)) {
                             return "Full Access Granted";
                         }
                         return "Not a valid command. Type a 'help' for a list of commands";
