@@ -8,6 +8,7 @@ namespace Fahrenheit451API.Controllers
     {
         private static int author = 0;
         private static bool limited = true;
+        private static string status = "";
         private static bool access = false;
         private static readonly string[] books = {
             "Gulliver's Travels",
@@ -33,8 +34,6 @@ namespace Fahrenheit451API.Controllers
             "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"
         };
 
-        int step = 0;
-
         [HttpPost]
         public IActionResult Respond([FromBody] UserInput input)
         {
@@ -54,7 +53,7 @@ namespace Fahrenheit451API.Controllers
                 switch (step) 
                 {
                     case 0:
-                        if (input.ToLower() == "y") 
+                        if (input.ToLower() == "continue") 
                         {
                             step++;
                             return "Please enter your name:";
@@ -73,16 +72,67 @@ namespace Fahrenheit451API.Controllers
                         if (CheckForBook(input.ToLower())) 
                         {
                             step++;
-                            return "Access granted. You can access 1 book(s)";
+                            access = true;
+                            return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
                         }
                         return "Incorrect title. Try again.";
                     default:
-                    return "Access Denied";
+                        return "";
 
                 }
             }
-            
-            return "Access granted.";
+            else if (limited) {
+                
+                switch (input.ToLower())
+                {
+                    case "help":
+                        return GetHelp();
+                    case "get permission":
+                        return PermissionRiddle();
+                    default:
+                        if (isFullPermissionGranted(input.ToLower())) {
+                            return "Full Access Granted";
+                        }
+                        return "Not a valid command. Type a 'help' for a list of commands";
+                }
+            }
+            else {
+                switch (input) {
+                    case "help":
+                        return GetHelp();
+                    default:
+                        return "Not a valid command. Type a 'help' for a list of commands"; 
+                }
+            }
+        }
+
+        private string PermissionRiddle()
+        {
+            status = "getting permission";
+            return "I rise from the ashes, reborn again, where books are a symbol of hope, when all seems lost, I'm reborn, no matter what";
+        }
+
+        private bool isFullPermissionGranted(string input) {
+            if (input == "phoenix" && status == "getting permission") {
+                limited = false;
+                status = "";
+                return true;
+            }
+            status = "";
+            return false;
+        }
+
+        private string GetHelp()
+        {
+            if (limited)
+            {
+                return "Available commands:\n" + 
+                        "help - Opens this menu\n" +
+                        "get permission - Request additional access\n";
+            }
+
+            return "Available commands:\n" + 
+                    "help - Opens this menu\n";
         }
 
         private bool CheckForName(string input)
@@ -109,9 +159,10 @@ namespace Fahrenheit451API.Controllers
         }
 
 
-        public class UserInput
-        {
-            public required string Text { get; set; }
-        }
+        
+    }
+    public class UserInput
+    {
+        public required string Text { get; set; }
     }
 }

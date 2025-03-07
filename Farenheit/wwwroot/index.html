@@ -71,6 +71,9 @@
             });
             let data = await response.json();
             
+            // Ensure newlines render properly in HTML
+            let formattedResponse = data.response.replace(/\n/g, "<br>");
+            
             // Display the response from the server
             outputDiv.innerHTML += `<div class="output">${data.response}</div>`;
             document.getElementById("userInput").value = ""; // Clear input after submitting
