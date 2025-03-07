@@ -104,6 +104,8 @@ namespace Fahrenheit451API.Controllers
                 switch (input) {
                     case "help":
                         return GetHelp();
+                    case "books":
+                        return AvailableBooks();
                     default:
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
@@ -147,7 +149,7 @@ namespace Fahrenheit451API.Controllers
 
             return "Available commands:\n" + 
                         "help - Opens this menu\n" +
-                        "books - Lists all books available to you/n" +
+                        "books - Lists all books available to you\n" +
                         additionalStuff;
         }
 
