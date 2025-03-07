@@ -112,6 +112,8 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
+        
+
         private string AvailableBooks(){
             if (limited) {
                 return "You have access to 1 book(s):\n" + books[author];
