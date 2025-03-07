@@ -89,6 +89,8 @@ namespace Fahrenheit451API.Controllers
                         return GetHelp();
                     case "get permission":
                         return PermissionRiddle();
+                    case "books":
+                        return AvailableBooks();
                     default:
                         if (isFullPermissionGranted(input.ToLower())) {
                             return "Full Access Granted";
@@ -104,6 +106,14 @@ namespace Fahrenheit451API.Controllers
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
             }
+        }
+
+        private string AvailableBooks(){
+            if (limited) {
+                return "You have access to 1 book(s):/n" + books[author];
+            }
+            return "you have access to 14 book(s):/n" + string.Join("/n", books);
+
         }
 
         private string PermissionRiddle()
