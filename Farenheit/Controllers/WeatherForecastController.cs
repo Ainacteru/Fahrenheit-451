@@ -7,10 +7,15 @@ namespace Fahrenheit451API.Controllers
     [Route("api\respond")]
     public class FahrenheitController : ControllerBase
     {
-        private static int author = 0;
+        // Path to the folder containing the text files
+        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "TextFiles");
+        
         private static bool limited = true;
-        private static string status = "";
         private static bool access = false;
+
+        private static string status = "";
+        private static int author = 0;
+
         private static readonly string[] books = {
             "Gulliver's Travels",
             "On the Origin of Species", 
@@ -108,35 +113,30 @@ namespace Fahrenheit451API.Controllers
                     case "books":
                         return AvailableBooks();
                     default:
+                        if (input.StartsWith("open "))
+                        {
+                            // Remove the "open " prefix and match the remaining part with book titles
+                            string bookTitle = input.Substring(5);  // Removes the "open " part
+                            return OpenBook(bookTitle);
+                        }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
             }
         }
 
         private string OpenBook(string input) {
-            try {
-                    //Pass the file path and file name to the StreamReader constructor
-                    StreamReader sr = new StreamReader(input + ".txt");
-                    //Read the first line of text
-                    line = sr.ReadLine();
-                    //Continue to read until you reach end of file
-                    while (line != null)
-                    {
-                        //write the line to console window
-                        Console.WriteLine(line);
-                        //Read the next line
-                        line = sr.ReadLine();
-                    }
-                    //close the file
-                    sr.Close();
-                    Console.ReadLine();
-                }
-            catch(Exception e){
-                    Console.WriteLine("Exception: " + e.Message);
-                }
-            finally {
-                    Console.WriteLine("Executing finally block.");
-                }
+            // Make sure the input is sanitized and used correctly in the file path
+            string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+
+            // Check if the file exists
+            if (System.IO.File.Exists(filePath))
+            {
+                // Read and return the content of the file
+                return System.IO.File.ReadAllText(filePath);
+            }
+
+            // If file does not exist, return null
+            return "Book not found in database";
         }
 
         private string AvailableBooks(){
