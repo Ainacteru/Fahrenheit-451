@@ -113,7 +113,7 @@ namespace Fahrenheit451API.Controllers
                     case "books":
                         return AvailableBooks();
                     default:
-                        if (input.StartsWith("open "))
+                        if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
                             string bookTitle = input.Substring(5);  // Removes the "open " part
@@ -128,8 +128,11 @@ namespace Fahrenheit451API.Controllers
             // Make sure the input is sanitized and used correctly in the file path
             string filePath = Path.Combine(_textFileDirectory, input + ".txt");
 
+            if (limited && (filePath == books[author])) {
+                return System.IO.File.ReadAllText(filePath);
+            }
             // Check if the file exists
-            if (System.IO.File.Exists(filePath))
+            else if (System.IO.File.Exists(filePath))
             {
                 // Read and return the content of the file
                 return System.IO.File.ReadAllText(filePath);
@@ -144,7 +147,6 @@ namespace Fahrenheit451API.Controllers
                 return "You have access to 1 book(s):\n" + books[author];
             }
             return "you have access to 14 book(s):\n" + string.Join("\n", books);
-
         }
 
         private string PermissionRiddle()
