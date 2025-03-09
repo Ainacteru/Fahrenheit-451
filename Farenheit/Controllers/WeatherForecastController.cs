@@ -8,7 +8,7 @@ namespace Fahrenheit451API.Controllers
     public class FahrenheitController : ControllerBase
     {
         // Path to the folder containing the text files
-        private readonly string _textFileDirectory = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "TextFiles");
+        //private readonly string _textFileDirectory = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "TextFiles");
         
         private static bool limited = true;
         private static bool access = false;
@@ -63,7 +63,7 @@ namespace Fahrenheit451API.Controllers
                         if (input == "continue") 
                         {
                             step++;
-                            return "Please enter your name:";
+                            return "Please enter your name:" + step.ToString();
                         }
                         return "Access Denied.";
 
@@ -127,7 +127,10 @@ namespace Fahrenheit451API.Controllers
 
         private string OpenBook(string input) {
             // Make sure the input is sanitized and used correctly in the file path
-            string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+            string filePath = "";
+            //Path.Combine(_textFileDirectory, input + ".txt");
+
+            //return $"Looking for file: {filePath}\nExists: {System.IO.File.Exists(filePath)}"; 
 
             if (limited && (filePath == books[author])) {
                 return System.IO.File.ReadAllText(filePath);
@@ -178,9 +181,10 @@ namespace Fahrenheit451API.Controllers
             }
 
             return "Available commands:\n" + 
-                        "help - Opens this menu\n" +
-                        "books - Lists all books available to you\n" +
-                        additionalStuff;
+                    "help - Opens this menu\n" +
+                    "books - Lists all books available to you\n" +
+                    "open {book} - Shows you a section book saved in our database\n" +
+                    additionalStuff;
         }
 
         private bool CheckForName(string input)

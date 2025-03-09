@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -27,7 +32,27 @@ app.UseCors(policy =>
           .AllowAnyMethod()
           .AllowAnyHeader());
 
-app.UseStaticFiles(); // Enable serving static files (index.html)
+// Set the correct static file path outside of the "Farenheit" folder
+string staticFilesPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "publish", "wwwroot");
+
+if (!Directory.Exists(staticFilesPath))
+{
+    Console.WriteLine($"Static files directory not found: {staticFilesPath}");
+}
+else
+{
+    app.UseDefaultFiles(new DefaultFilesOptions
+    {
+        DefaultFileNames = new List<string> { "index.html" },
+    });
+
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(staticFilesPath),
+        RequestPath = ""
+    });
+}
+
 
 app.UseAuthorization();
 

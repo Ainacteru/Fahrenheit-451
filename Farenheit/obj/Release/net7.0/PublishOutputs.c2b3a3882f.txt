@@ -1,0 +1,12 @@
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Farenheit
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/appsettings.Development.json
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/appsettings.json
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Farenheit.dll
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Farenheit.deps.json
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Farenheit.runtimeconfig.json
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Farenheit.pdb
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Microsoft.AspNetCore.OpenApi.dll
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Microsoft.OpenApi.dll
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Swashbuckle.AspNetCore.Swagger.dll
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/Gary/Documents/GitHub/Farenheit-451/publish/Swashbuckle.AspNetCore.SwaggerUI.dll
