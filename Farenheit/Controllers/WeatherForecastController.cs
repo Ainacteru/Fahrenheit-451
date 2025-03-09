@@ -63,7 +63,7 @@ namespace Fahrenheit451API.Controllers
                         if (input == "continue") 
                         {
                             step++;
-                            return "Please enter your name:" + step.ToString();
+                            return "Please enter your name:";
                         }
                         return "Access Denied.";
 
