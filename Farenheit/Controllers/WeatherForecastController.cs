@@ -149,25 +149,29 @@ namespace Fahrenheit451API.Controllers
         }
 
         private string OpenBook(string input) {
-            // Make sure the input is sanitized and used correctly in the file path
-            string filePath = Path.Combine(_textFileDirectory, input + ".txt");
 
-            if (limited && (filePath == books[author])) {
-                return System.IO.File.ReadAllText(filePath);
+            try {
+                // Make sure the input is sanitized and used correctly in the file path
+                string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+
+                if (limited && (filePath == books[author])) {
+                    return System.IO.File.ReadAllText(filePath);
+                }
+                // Check if the file exists
+                else if (System.IO.File.Exists(filePath))
+                {
+                    // Read and return the content of the file
+                    return System.IO.File.ReadAllText(filePath);
+                }
+
+                string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
+                return "Files found:\n" + string.Join("\n", files);
             }
-            // Check if the file exists
-            else if (System.IO.File.Exists(filePath))
+            catch (Exception ex)
             {
-                // Read and return the content of the file
-                return System.IO.File.ReadAllText(filePath);
+                // Log or return a more specific error message
+                return $"Error occurred: {ex.Message}";
             }
-
-            string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
-
-            return "Files found:\n" + string.Join("\n", files);
-
-            // If file does not exist, return null
-            return $"Book not found in database. Expected at: {filePath}";
         }
 
         private string AvailableBooks(){
