@@ -150,6 +150,10 @@ namespace Fahrenheit451API.Controllers
                 return System.IO.File.ReadAllText(filePath);
             }
 
+            string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
+
+            return "Files found:\n" + string.Join("\n", files);
+
             // If file does not exist, return null
             return $"Book not found in database. Expected at: {filePath}";
         }
