@@ -133,7 +133,7 @@ namespace Fahrenheit451API.Controllers
         }
 
         private string ListFilePath(string input) {
-            return Path.Combine(_textFileDirectory, input + ".txt");
+            return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
         }
 
         private string OpenBook(string input) {
@@ -151,7 +151,7 @@ namespace Fahrenheit451API.Controllers
             }
 
             // If file does not exist, return null
-            return "Book not found in database";
+            return $"Book not found in database. Expected at: {filePath}";
         }
 
         private string AvailableBooks(){
