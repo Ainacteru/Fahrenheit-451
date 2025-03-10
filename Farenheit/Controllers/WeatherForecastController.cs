@@ -116,12 +116,12 @@ namespace Fahrenheit451API.Controllers
                         return AvailableBooks();
                     default:
 
-                        if (input.StartsWith("list ")) {
+                        if (answer.StartsWith("list ")) {
                              // Remove the "open " prefix and match the remaining part with book titles
                             string bookTitle = answer.Substring(5);  // Removes the "open " part
                             return ListFilePath(bookTitle);
                         }
-                        if (input.StartsWith("open ") )
+                        if (answer.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
                             string bookTitle = answer.Substring(5);  // Removes the "open " part
