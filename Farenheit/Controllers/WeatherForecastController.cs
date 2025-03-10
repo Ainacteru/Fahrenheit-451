@@ -8,7 +8,7 @@ namespace Fahrenheit451API.Controllers
     public class FahrenheitController : ControllerBase
     {
         // Path to the folder containing the text files
-        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Farenheit/TextFiles");
+        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "src", "farenheit", "TextFiles");
         
         private static bool limited = true;
         private static bool access = false;
