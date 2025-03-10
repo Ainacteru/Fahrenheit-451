@@ -118,13 +118,13 @@ namespace Fahrenheit451API.Controllers
 
                         if (input.StartsWith("list ")) {
                              // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = input.Substring(5);  // Removes the "open " part
+                            string bookTitle = answer.Substring(5);  // Removes the "open " part
                             return ListFilePath(bookTitle);
                         }
                         if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = input.Substring(5);  // Removes the "open " part
+                            string bookTitle = answer.Substring(5);  // Removes the "open " part
                             return OpenBook(bookTitle);
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
