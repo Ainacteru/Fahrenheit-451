@@ -151,8 +151,9 @@ namespace Fahrenheit451API.Controllers
         private string OpenBook(string input) {
 
             try {
+                string absolutePath = Path.GetFullPath(_textFileDirectory);
                 // Make sure the input is sanitized and used correctly in the file path
-                string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+                string filePath = Path.Combine(absolutePath, input + ".txt");
 
                 if (limited && (filePath == books[author])) {
                     return System.IO.File.ReadAllText(filePath);
@@ -164,7 +165,7 @@ namespace Fahrenheit451API.Controllers
                     return System.IO.File.ReadAllText(filePath);
                 }
 
-                string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
+                string[] files = Directory.GetFiles(absolutePath, "*.txt");
                 return "Files found:\n" + string.Join("\n", files);
             }
             catch (Exception ex)
