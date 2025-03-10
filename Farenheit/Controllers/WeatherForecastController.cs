@@ -129,6 +129,8 @@ namespace Fahrenheit451API.Controllers
             // Make sure the input is sanitized and used correctly in the file path
             string filePath = Path.Combine(_textFileDirectory, input + ".txt");
 
+            return filePath;
+
             if (limited && (filePath == books[author])) {
                 return System.IO.File.ReadAllText(filePath);
             }
