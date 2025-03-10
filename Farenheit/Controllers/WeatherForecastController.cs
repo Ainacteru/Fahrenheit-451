@@ -8,7 +8,7 @@ namespace Fahrenheit451API.Controllers
     public class FahrenheitController : ControllerBase
     {
         // Path to the folder containing the text files
-        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "TextFiles");
+        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Farenheit/TextFiles");
         
         private static bool limited = true;
         private static bool access = false;
@@ -60,7 +60,7 @@ namespace Fahrenheit451API.Controllers
                 switch (step) 
                 {
                     case 0:
-                        if(input == "y") {step = 3; limited = false; return "COOLEST PERSON IN THE WORLD!!";}
+                        if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
                         if (input == "continue") 
                         {
                             step++;
