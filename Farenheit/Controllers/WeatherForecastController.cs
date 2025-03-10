@@ -116,10 +116,10 @@ namespace Fahrenheit451API.Controllers
                         return AvailableBooks();
                     default:
 
-                        if (answer.StartsWith("list ")) {
+                        if (answer.StartsWith("list")) {
                              // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = answer.Substring(5);  // Removes the "open " part
-                            return ListFilePath(bookTitle);
+                            //string bookTitle = answer.Substring(5);  // Removes the "open " part
+                            return ListFilePath();
                         }
                         if (answer.StartsWith("open ") )
                         {
@@ -132,8 +132,20 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-        private string ListFilePath(string input) {
-            return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
+        private string ListFilePath() {
+
+            string rootDir = Directory.GetCurrentDirectory();
+            var allFiles = Directory.GetFiles(rootDir, "*.txt", SearchOption.AllDirectories);
+            
+            if (allFiles.Length == 0)
+            {
+                return "No .txt files found in the entire project.";
+            }
+
+            return "All .txt files found:\n" + string.Join("\n", allFiles);
+
+
+            //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
         }
 
         private string OpenBook(string input) {
