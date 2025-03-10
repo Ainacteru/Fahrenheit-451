@@ -8,7 +8,7 @@ namespace Fahrenheit451API.Controllers
     public class FahrenheitController : ControllerBase
     {
         // Path to the folder containing the text files
-        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "src", "farenheit", "TextFiles");
+        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "src", "Farenheit", "TextFiles");
         
         private static bool limited = true;
         private static bool access = false;
@@ -115,6 +115,12 @@ namespace Fahrenheit451API.Controllers
                     case "books":
                         return AvailableBooks();
                     default:
+
+                        if (input.StartsWith("list ")) {
+                             // Remove the "open " prefix and match the remaining part with book titles
+                            string bookTitle = input.Substring(5);  // Removes the "open " part
+                            return ListFilePath(bookTitle);
+                        }
                         if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
@@ -124,6 +130,10 @@ namespace Fahrenheit451API.Controllers
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
             }
+        }
+
+        private string ListFilePath(string input) {
+            return Path.Combine(_textFileDirectory, input + ".txt");
         }
 
         private string OpenBook(string input) {
