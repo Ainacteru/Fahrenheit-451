@@ -46,14 +46,6 @@ namespace Fahrenheit451API.Controllers
         {
             int step = HttpContext.Session.GetInt32("step") ?? 0;
 
-            if (input.Text.ToLower() == "451") {
-                return Problem(
-                title: "Access Denied",
-                detail: "Access to the terminal has been restricted",
-                statusCode: (int)HttpStatusCode.UnavailableForLegalReasons
-            );
-            }
-
             string response = ProcessInput(input.Text, ref step);
 
             HttpContext.Session.SetInt32("step", step);  // Store updated step
@@ -112,6 +104,8 @@ namespace Fahrenheit451API.Controllers
                         return AvailableBooks();
                     case "mission":
                         return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
+                    case "members":
+                        return OrginizationMembers();
                     default:
                         if (isFullPermissionGranted(input)) {
                             return "Full Access Granted";
@@ -130,6 +124,10 @@ namespace Fahrenheit451API.Controllers
                         return GetHelp();
                     case "books":
                         return AvailableBooks();
+                    case "mission":
+                        return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
+                    case "members":
+                        return OrginizationMembers();
                     default:
 
                         // if (answer.StartsWith("list")) {
@@ -161,6 +159,14 @@ namespace Fahrenheit451API.Controllers
 
         //     //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
         // }
+
+        private string OrginizationMembers() {
+
+            if(!limited) {
+                return "";
+            }
+            return "No access to this information";
+        }
 
         private string OpenBook(string input) {
 
