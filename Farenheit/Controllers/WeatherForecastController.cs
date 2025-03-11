@@ -47,7 +47,11 @@ namespace Fahrenheit451API.Controllers
             int step = HttpContext.Session.GetInt32("step") ?? 0;
 
             if (input.Text.ToLower() == "451") {
-                return StatusCode((int)HttpStatusCode.UnavailableForLegalReasons, "Access to the terminal has been restricted");
+                return Problem(
+                title: "Access Denied",
+                detail: "Access to the terminal has been restricted",
+                statusCode: (int)HttpStatusCode.UnavailableForLegalReasons
+            );
             }
 
             string response = ProcessInput(input.Text, ref step);
