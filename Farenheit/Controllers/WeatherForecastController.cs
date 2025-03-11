@@ -104,7 +104,12 @@ namespace Fahrenheit451API.Controllers
                     default:
                         if (isFullPermissionGranted(input)) {
                             return "Full Access Granted";
+                        } else if (answer.StartsWith("open ")) {
+                            // Remove the "open " prefix and match the remaining part with book titles
+                            string bookTitle = answer.Substring(5);  // Removes the "open " part
+                            return OpenBook(bookTitle);
                         }
+                        
                         return "Not a valid command. Type a 'help' for a list of commands";
                 }
             }
@@ -116,11 +121,9 @@ namespace Fahrenheit451API.Controllers
                         return AvailableBooks();
                     default:
 
-                        if (answer.StartsWith("list")) {
-                             // Remove the "open " prefix and match the remaining part with book titles
-                            //string bookTitle = answer.Substring(5);  // Removes the "open " part
-                            return ListFilePath();
-                        }
+                        // if (answer.StartsWith("list")) {
+                        //     return ListFilePath();
+                        // }
                         if (answer.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
@@ -132,21 +135,21 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-        private string ListFilePath() {
+        // private string ListFilePath() {
 
-            string rootDir = Directory.GetCurrentDirectory();
-            var allFiles = Directory.GetFiles(rootDir, "*.txt", SearchOption.AllDirectories);
+        //     string rootDir = Directory.GetCurrentDirectory();
+        //     var allFiles = Directory.GetFiles(rootDir, "*.txt", SearchOption.AllDirectories);
             
-            if (allFiles.Length == 0)
-            {
-                return "No .txt files found in the entire project.";
-            }
+        //     if (allFiles.Length == 0)
+        //     {
+        //         return "No .txt files found in the entire project.";
+        //     }
 
-            return "All .txt files found:\n" + string.Join("\n", allFiles);
+        //     return "All .txt files found:\n" + string.Join("\n", allFiles);
 
 
-            //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
-        }
+        //     //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
+        // }
 
         private string OpenBook(string input) {
 
@@ -163,9 +166,10 @@ namespace Fahrenheit451API.Controllers
                     // Read and return the content of the file
                     return System.IO.File.ReadAllText(filePath);
                 }
-
-                string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
-                return "Files found:\n" + string.Join("\n", files);
+                
+                return "Text not found in Database";
+                // string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
+                // return "Files found:\n" + string.Join("\n", files);
             }
             catch (Exception ex)
             {
