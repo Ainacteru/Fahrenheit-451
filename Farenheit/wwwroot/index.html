@@ -59,6 +59,26 @@
     <script>
         async function sendInput() {
             let userText = document.getElementById("userInput").value;
+
+            try {
+                let response = await fetch(`/api/File/read/${encodeURIComponent(input)}`);
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP Error ${response.status}: ${response.statusText}`);
+                }
+        
+                let data = await response.json(); // Make sure response is JSON
+        
+                if (!data.content) {
+                    throw new Error("Invalid response: 'content' field is missing.");
+                }
+        
+                document.getElementById("output").innerHTML = data.content.replace(/\n/g, "<br>");
+            } catch (error) {
+                console.error("Error fetching file:", error);
+                document.getElementById("output").innerHTML = `<span style="color: red;">Error: ${error.message}</span>`;
+            }
+
             if (!userText) return;
 
             const outputDiv = document.getElementById("response");
