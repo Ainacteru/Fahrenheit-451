@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.Net;
 
 namespace Fahrenheit451API.Controllers
 {
@@ -44,6 +45,10 @@ namespace Fahrenheit451API.Controllers
         public IActionResult Respond([FromBody] UserInput input)
         {
             int step = HttpContext.Session.GetInt32("step") ?? 0;
+
+            if (input.Text.ToLower() == "451") {
+                return StatusCode((int)HttpStatusCode.UnavailableForLegalReasons, "Access to the terminal has been restricted");
+            }
 
             string response = ProcessInput(input.Text, ref step);
 
@@ -101,6 +106,8 @@ namespace Fahrenheit451API.Controllers
                         return PermissionRiddle();
                     case "books":
                         return AvailableBooks();
+                    case "mission":
+                        return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
                     default:
                         if (isFullPermissionGranted(input)) {
                             return "Full Access Granted";
@@ -207,11 +214,10 @@ namespace Fahrenheit451API.Controllers
         private string GetHelp()
         {
             string additionalStuff;
-            if (limited)
-            {
-                additionalStuff = "get permission - Request additional access\n";
-            }
-            else {
+            if (limited) {
+                additionalStuff = "get permission - Request additional access\n" + 
+                                  "mission - Shows what we are trying to do";
+            } else {
                 additionalStuff = "";
             }
 
