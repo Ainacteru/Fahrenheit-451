@@ -8,7 +8,7 @@ namespace Fahrenheit451API.Controllers
     public class FahrenheitController : ControllerBase
     {
         // Path to the folder containing the text files
-        private readonly string _textFileDirectory = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName, "TextFiles");
+        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/TextFiles");
         
         private static bool limited = true;
         private static bool access = false;
@@ -60,6 +60,7 @@ namespace Fahrenheit451API.Controllers
                 switch (step) 
                 {
                     case 0:
+                        if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
                         if (input == "continue") 
                         {
                             step++;
@@ -114,10 +115,16 @@ namespace Fahrenheit451API.Controllers
                     case "books":
                         return AvailableBooks();
                     default:
-                        if (input.StartsWith("open ") )
+
+                        if (answer.StartsWith("list")) {
+                             // Remove the "open " prefix and match the remaining part with book titles
+                            //string bookTitle = answer.Substring(5);  // Removes the "open " part
+                            return ListFilePath();
+                        }
+                        if (answer.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = input.Substring(5);  // Removes the "open " part
+                            string bookTitle = answer.Substring(5);  // Removes the "open " part
                             return OpenBook(bookTitle);
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
@@ -125,22 +132,46 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-        private string OpenBook(string input) {
-            // Make sure the input is sanitized and used correctly in the file path
-            string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+        private string ListFilePath() {
 
-            if (limited && (filePath == books[author])) {
-                return System.IO.File.ReadAllText(filePath);
-            }
-            // Check if the file exists
-            else if (System.IO.File.Exists(filePath))
+            string rootDir = Directory.GetCurrentDirectory();
+            var allFiles = Directory.GetFiles(rootDir, "*.txt", SearchOption.AllDirectories);
+            
+            if (allFiles.Length == 0)
             {
-                // Read and return the content of the file
-                return System.IO.File.ReadAllText(filePath);
+                return "No .txt files found in the entire project.";
             }
 
-            // If file does not exist, return null
-            return "Book not found in database";
+            return "All .txt files found:\n" + string.Join("\n", allFiles);
+
+
+            //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
+        }
+
+        private string OpenBook(string input) {
+
+            try {
+                // Make sure the input is sanitized and used correctly in the file path
+                string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+
+                if (limited && (filePath == books[author])) {
+                    return System.IO.File.ReadAllText(filePath);
+                }
+                // Check if the file exists
+                else if (System.IO.File.Exists(filePath))
+                {
+                    // Read and return the content of the file
+                    return System.IO.File.ReadAllText(filePath);
+                }
+
+                string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
+                return "Files found:\n" + string.Join("\n", files);
+            }
+            catch (Exception ex)
+            {
+                // Log or return a more specific error message
+                return $"Error occurred: {ex.Message}";
+            }
         }
 
         private string AvailableBooks(){
