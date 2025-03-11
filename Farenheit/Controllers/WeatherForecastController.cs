@@ -154,19 +154,22 @@ namespace Fahrenheit451API.Controllers
         private string OpenBook(string input) {
 
             try {
-                // Make sure the input is sanitized and used correctly in the file path
-                string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+                // Get all .txt files in the directory
+                string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
 
-                if (limited && (filePath == books[author])) {
-                    return System.IO.File.ReadAllText(filePath);
-                }
-                // Check if the file exists
-                else if (System.IO.File.Exists(filePath))
+                // Find a case-insensitive match
+                string? matchingFile = files
+                    .FirstOrDefault(f => Path.GetFileNameWithoutExtension(f).Equals(input, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingFile != null)
                 {
-                    // Read and return the content of the file
-                    return System.IO.File.ReadAllText(filePath);
+                    if (limited && (matchingFile == books[author])) 
+                    {
+                        return System.IO.File.ReadAllText(matchingFile);
+                    }
+                    return System.IO.File.ReadAllText(matchingFile);
                 }
-                
+
                 return "Text not found in Database";
                 // string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
                 // return "Files found:\n" + string.Join("\n", files);
