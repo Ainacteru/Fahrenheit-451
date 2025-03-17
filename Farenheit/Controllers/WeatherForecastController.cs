@@ -88,9 +88,9 @@ namespace Fahrenheit451API.Controllers
                 default:
                     if (isFullPermissionGranted(input)) {
                         return "Full Access Granted";
-                    } else if (answer.StartsWith("open ")) {
+                    } else if (input.StartsWith("open ")) {
                         // Remove the "open " prefix and match the remaining part with book titles
-                        string bookTitle = answer.Substring(5);  // Removes the "open " part
+                        string bookTitle = input.Substring(5);  // Removes the "open " part
                         return OpenBook(bookTitle);
                     }
                     
@@ -109,10 +109,10 @@ namespace Fahrenheit451API.Controllers
                     case "members":
                         return OrginizationMembers();
                     default:
-                        if (answer.StartsWith("open ") )
+                        if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = answer.Substring(5);  // Removes the "open " part
+                            string bookTitle = input.Substring(5);  // Removes the "open " part
                             return OpenBook(bookTitle);
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
