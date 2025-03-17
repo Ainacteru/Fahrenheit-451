@@ -44,11 +44,11 @@ namespace Fahrenheit451API.Controllers
         [HttpPost]
         public IActionResult Respond([FromBody] UserInput input)
         {
-            int step = HttpContext.Session.GetInt32("step") ?? 0;
+            //int step = HttpContext.Session.GetInt32("step") ?? 0;
 
-            string response = ProcessInput(input.Text, ref step);
+            string response = ProcessInput(input.Text);
 
-            HttpContext.Session.SetInt32("step", step);  // Store updated step
+            // HttpContext.Session.SetInt32("step", step);  // Store updated step
 
             return Ok(new { response });
         }
@@ -219,7 +219,8 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-        private string SignIn(string input, int step) {
+        private string SignIn(string input) {
+            int step = 0;
             switch (step) {
                 case 0:
                     if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
