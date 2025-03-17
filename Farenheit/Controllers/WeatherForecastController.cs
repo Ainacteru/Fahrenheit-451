@@ -55,16 +55,21 @@ namespace Fahrenheit451API.Controllers
 
         private string ProcessInput(string answer, ref int step)
         {
-            string input = answer.ToLower();
-            if (!access) 
-            {
-                return SignIn(input, step);
+            try {
+                string input = answer.ToLower();
+                if (!access) 
+                {
+                    return SignIn(input, step);
+                }
+                else if (limited) {
+                    return LessAccess(input);
+                }
+                else {
+                    return FullAccess(input);
+                }
             }
-            else if (limited) {
-                return LessAccess(input);
-            }
-            else {
-                return FullAccess(input);
+            catch (Exception e) {
+                return "Internal Error: " + e.Message;
             }
         }
 
@@ -214,40 +219,39 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-    }
+        private string SignIn(string input, int step) {
+            switch (step) {
+                case 0:
+                    if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
+                    if (input == "continue") 
+                    {
+                        step++;
+                        return "Please enter your name:";
+                    }
+                    return "Access Denied.";
 
-    private string SignIn(string input, int step) {
-        switch (step) {
-            case 0:
-                if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
-                if (input == "continue") 
-                {
-                    step++;
-                    return "Please enter your name:";
-                }
-                return "Access Denied.";
+                case 1:
+                    if (CheckForName(input)) 
+                    {
+                        step++;
+                        return "Please enter your assigned title:";
+                    }
+                    else if (input == "ari") {return "ew";}
+                    
+                    return "Invalid name. Try again.";
 
-            case 1:
-                if (CheckForName(input)) 
-                {
-                    step++;
-                    return "Please enter your assigned title:";
-                }
-                else if (input == "ari") {return "ew";}
-                
-                return "Invalid name. Try again.";
+                case 2:
+                    if (CheckForBook(input)) 
+                    {
+                        step++;
+                        access = true;
+                        return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
+                    }
+                    return "Incorrect title. Try again.";
+                default:
+                    return "";
 
-            case 2:
-                if (CheckForBook(input)) 
-                {
-                    step++;
-                    access = true;
-                    return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
-                }
-                return "Incorrect title. Try again.";
-            default:
-                return "";
-
+            }
         }
     }
     public class UserInput
