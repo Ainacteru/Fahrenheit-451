@@ -58,67 +58,42 @@ namespace Fahrenheit451API.Controllers
             string input = answer.ToLower();
             if (!access) 
             {
-                switch (step) 
-                {
-                    case 0:
-                        if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
-                        if (input == "continue") 
-                        {
-                            step++;
-                            return "Please enter your name:";
-                        }
-                        return "Access Denied.";
-
-                    case 1:
-                        if (CheckForName(input)) 
-                        {
-                            step++;
-                            return "Please enter your assigned title:";
-                        }
-                        else if (input == "ari") {return "ew";}
-                        
-                        return "Invalid name. Try again.";
-
-                    case 2:
-                        if (CheckForBook(input)) 
-                        {
-                            step++;
-                            access = true;
-                            return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
-                        }
-                        return "Incorrect title. Try again.";
-                    default:
-                        return "";
-
-                }
+                return SignIn(input, step);
             }
             else if (limited) {
-                
-                switch (input)
-                {
-                    case "help":
-                        return GetHelp();
-                    case "get permission":
-                        return PermissionRiddle();
-                    case "books":
-                        return AvailableBooks();
-                    case "mission":
-                        return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
-                    case "members":
-                        return OrginizationMembers();
-                    default:
-                        if (isFullPermissionGranted(input)) {
-                            return "Full Access Granted";
-                        } else if (answer.StartsWith("open ")) {
-                            // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = answer.Substring(5);  // Removes the "open " part
-                            return OpenBook(bookTitle);
-                        }
-                        
-                        return "Not a valid command. Type a 'help' for a list of commands";
-                }
+                return LessAccess(input);
             }
             else {
+                return FullAccess(input);
+            }
+        }
+
+        private string LessAccess(string input) {
+            switch (input) {
+                case "help":
+                    return GetHelp();
+                case "get permission":
+                    return PermissionRiddle();
+                case "books":
+                    return AvailableBooks();
+                case "mission":
+                    return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
+                case "members":
+                    return OrginizationMembers();
+                default:
+                    if (isFullPermissionGranted(input)) {
+                        return "Full Access Granted";
+                    } else if (answer.StartsWith("open ")) {
+                        // Remove the "open " prefix and match the remaining part with book titles
+                        string bookTitle = answer.Substring(5);  // Removes the "open " part
+                        return OpenBook(bookTitle);
+                    }
+                    
+                    return "Not a valid command. Type a 'help' for a list of commands";
+            }
+        }
+
+        private string FullAccess(string input) {
                 switch (input) {
                     case "help":
                         return GetHelp();
@@ -129,10 +104,6 @@ namespace Fahrenheit451API.Controllers
                     case "members":
                         return OrginizationMembers();
                     default:
-
-                        // if (answer.StartsWith("list")) {
-                        //     return ListFilePath();
-                        // }
                         if (answer.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
@@ -141,24 +112,7 @@ namespace Fahrenheit451API.Controllers
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
-            }
         }
-
-        // private string ListFilePath() {
-
-        //     string rootDir = Directory.GetCurrentDirectory();
-        //     var allFiles = Directory.GetFiles(rootDir, "*.txt", SearchOption.AllDirectories);
-            
-        //     if (allFiles.Length == 0)
-        //     {
-        //         return "No .txt files found in the entire project.";
-        //     }
-
-        //     return "All .txt files found:\n" + string.Join("\n", allFiles);
-
-
-        //     //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
-        // }
 
         private string OrginizationMembers() {
 
@@ -260,8 +214,41 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
+    }
 
-        
+    private string SignIn(string input, int step) {
+        switch (step) {
+            case 0:
+                if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
+                if (input == "continue") 
+                {
+                    step++;
+                    return "Please enter your name:";
+                }
+                return "Access Denied.";
+
+            case 1:
+                if (CheckForName(input)) 
+                {
+                    step++;
+                    return "Please enter your assigned title:";
+                }
+                else if (input == "ari") {return "ew";}
+                
+                return "Invalid name. Try again.";
+
+            case 2:
+                if (CheckForBook(input)) 
+                {
+                    step++;
+                    access = true;
+                    return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
+                }
+                return "Incorrect title. Try again.";
+            default:
+                return "";
+
+        }
     }
     public class UserInput
     {
