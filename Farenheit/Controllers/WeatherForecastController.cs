@@ -11,13 +11,36 @@ namespace Fahrenheit451API.Controllers
         // Path to the folder containing the text files
         private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/TextFiles");
         
-        private static bool limited = true;
-        private static bool access = false;
+         // Get session values or set defaults
+        private bool limited
+        {
+            get => HttpContext.Session.GetString("limited") == "true";
+            set => HttpContext.Session.SetString("limited", value.ToString());
+        }
 
-        private static string status = "";
-        private static int author = 0;
+        private bool access
+        {
+            get => HttpContext.Session.GetString("access") == "true";
+            set => HttpContext.Session.SetString("access", value.ToString());
+        }
 
-        private static int step = 0;
+        private string status
+        {
+            get => HttpContext.Session.GetString("status") ?? "";
+            set => HttpContext.Session.SetString("status", value);
+        }
+
+        private int author
+        {
+            get => HttpContext.Session.GetInt32("author") ?? 0;
+            set => HttpContext.Session.SetInt32("author", value);
+        }
+
+        private int step
+        {
+            get => HttpContext.Session.GetInt32("step") ?? 0;
+            set => HttpContext.Session.SetInt32("step", value);
+        }
 
         private static readonly string[] books = {
             "Gulliver's Travels",
@@ -186,15 +209,16 @@ namespace Fahrenheit451API.Controllers
         {
             string additionalStuff;
             if (limited) {
-                additionalStuff = "get permission - Request additional access\n" + 
-                                  "mission - Shows what we are trying to do";
+                additionalStuff = "get permission - Request additional access\n";
             } else {
                 additionalStuff = "";
             }
 
             return "Available commands:\n" + 
                         "help - Opens this menu\n" +
+                        "mission - Shows what we are trying to do\n" +
                         "books - Lists all books available to you\n" +
+                        "open {book} - shows you the contents of the book that was requested\n" +
                         additionalStuff;
         }
 
