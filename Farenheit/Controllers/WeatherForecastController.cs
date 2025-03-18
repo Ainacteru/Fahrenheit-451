@@ -247,7 +247,7 @@ namespace Fahrenheit451API.Controllers
                         return "Invalid name. Try again.";
                     }
                     catch (Exception e) {
-                        return e;
+                        return e.Message;
                     }
 
                 case 2:
