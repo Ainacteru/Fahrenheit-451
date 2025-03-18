@@ -55,13 +55,13 @@ namespace Fahrenheit451API.Controllers
             return Ok(new { response });
         }
 
-        private string ProcessInput(string answer, ref int step)
+        private string ProcessInput(string answer)
         {
             try {
                 string input = answer.ToLower();
                 if (!access) 
                 {
-                    return SignIn(input, step);
+                    return SignIn(input);
                 }
                 else if (limited) {
                     return LessAccess(input);
