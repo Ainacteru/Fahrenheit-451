@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Net;
+using Fahrenheit451API.SessionExtentions;
 
 namespace Fahrenheit451API.Controllers
 {
