@@ -12,11 +12,30 @@ namespace Fahrenheit451API.Controllers
         private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/TextFiles");
         
          // Get session values or set defaults
-        private bool limited
-        {
-            get => HttpContext.Session.GetString("limited") == "true";
-            set => HttpContext.Session.SetString("limited", value.ToString());
+        private bool limited {
+            get {
+                try  {
+                    var value = HttpContext.Session.GetString("limited");
+                    Console.WriteLine($"Getting 'limited' value from session: {value}");
+                    return value == "true";
+                }
+                catch (Exception ex) {
+                    Console.WriteLine($"Error retrieving 'limited' value from session: {ex.Message}");
+                    return false;
+                }
+            }
+            set {
+                try {
+                    Console.WriteLine($"Setting 'limited' value in session to: {value}");
+                    HttpContext.Session.SetString("limited", value.ToString());
+                }
+                catch (Exception ex){
+                    Console.WriteLine($"Error setting 'limited' value in session: {ex.Message}");
+                }
+            }
         }
+
+
         private bool access
         {
             get => HttpContext.Session.GetString("access") == "true";
@@ -81,8 +100,7 @@ namespace Fahrenheit451API.Controllers
         {
             try {
                 string input = answer.ToLower();
-                if (!access) 
-                {
+                if (!access) {
                     return SignIn(input);
                 }
                 else if (limited) {
