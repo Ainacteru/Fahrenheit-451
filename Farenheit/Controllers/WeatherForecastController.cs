@@ -16,29 +16,19 @@ namespace Fahrenheit451API.Controllers
         {
             get
             {
-                // Retrieve the string value from session
-                var value = HttpContext.Session.GetString("limited");
+                var value = HttpContext.Session.GetBoolean("limited");
 
-                // If no value is set, default to false
                 if (value == null)
                 {
                     Console.WriteLine("Session 'limited' value not found, defaulting to false.");
-                    return false;
+                    return false; // Default to false if not set
                 }
 
-                // Log the retrieved session value
-                Console.WriteLine($"Getting 'limited' value from session: {value}");
-
-                // Return true if the value is "true" (as a string), otherwise false
-                return value == "true";
+                return value.Value;
             }
             set
             {
-                // Log the new value being set
-                Console.WriteLine($"Setting 'limited' value in session to: {value}");
-
-                // Store the boolean as a string ("true" or "false") in session
-                HttpContext.Session.SetString("limited", value.ToString());
+                HttpContext.Session.SetBoolean("limited", value);
             }
         }
 
@@ -46,32 +36,21 @@ namespace Fahrenheit451API.Controllers
         {
             get
             {
-                // Retrieve the string value from session
-                var value = HttpContext.Session.GetString("access");
+                var value = HttpContext.Session.GetBoolean("access");
 
-                // If no value is set, default to false
                 if (value == null)
                 {
                     Console.WriteLine("Session 'access' value not found, defaulting to false.");
-                    return false;
+                    return false; // Default to false if not set
                 }
 
-                // Log the retrieved session value
-                Console.WriteLine($"Getting 'access' value from session: {value}");
-
-                // Return true if the value is "true" (as a string), otherwise false
-                return value == "true";
+                return value.Value;
             }
             set
             {
-                // Log the new value being set
-                Console.WriteLine($"Setting 'access' value in session to: {value}");
-
-                // Store the boolean as a string ("true" or "false") in session
-                HttpContext.Session.SetString("access", value.ToString());
+                HttpContext.Session.SetBoolean("access", value);
             }
         }
-
 
         private string status
         {
