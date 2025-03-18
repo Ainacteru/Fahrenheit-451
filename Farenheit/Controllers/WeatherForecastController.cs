@@ -234,14 +234,21 @@ namespace Fahrenheit451API.Controllers
                     return "Access Denied.";
 
                 case 1:
-                    if (CheckForName(input)) 
-                    {
-                        step++;
-                        return "Please enter your assigned title:";
+                    try { 
+                        if (CheckForName(input)) 
+                        {
+                            step++;
+                            return "Please enter your assigned title:";
+                        }
+                        else if (input == "ari") {
+                            throw new StackOverflowException("OH EW!");
+                        }
+                        
+                        return "Invalid name. Try again.";
                     }
-                    else if (input == "ari") {return "ew";}
-                    
-                    return "Invalid name. Try again.";
+                    catch (Exception e) {
+                        return e;
+                    }
 
                 case 2:
                     if (CheckForBook(input)) 

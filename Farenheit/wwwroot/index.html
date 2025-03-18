@@ -91,6 +91,7 @@
                 if (event.key === "Enter") {
                     event.preventDefault(); // Prevent form submission (if any)
                     sendInput(); // Trigger the input function on Enter
+                    window.scrollTo(0, document.body.scrollHeight); // Scroll to the bottom of the page after pressing Enter
                     // Clear the input field after pressing Enter (after sending input)
                     userInput.value = "";
                 }
