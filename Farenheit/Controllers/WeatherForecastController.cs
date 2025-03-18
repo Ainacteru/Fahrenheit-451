@@ -22,7 +22,7 @@ namespace Fahrenheit451API.Controllers
                 if (value == null)
                 {
                     Console.WriteLine("Session 'limited' value not found, defaulting to false.");
-                    return false; // Default to false if not set
+                    return true; // Default to false if not set
                 }
 
                 return value.Value;
