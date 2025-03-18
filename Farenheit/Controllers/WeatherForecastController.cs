@@ -17,7 +17,6 @@ namespace Fahrenheit451API.Controllers
             get => HttpContext.Session.GetString("limited") == "true";
             set => HttpContext.Session.SetString("limited", value.ToString());
         }
-
         private bool access
         {
             get => HttpContext.Session.GetString("access") == "true";
