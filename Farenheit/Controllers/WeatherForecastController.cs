@@ -12,35 +12,66 @@ namespace Fahrenheit451API.Controllers
         private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/TextFiles");
         
          // Get session values or set defaults
-        private bool limited {
-            get {
-                try  {
-                    var value = HttpContext.Session.GetString("limited");
-                    Console.WriteLine($"Getting 'limited' value from session: {value}");
-                    return value == "true";
-                }
-                catch (Exception ex) {
-                    Console.WriteLine($"Error retrieving 'limited' value from session: {ex.Message}");
+        private bool limited
+        {
+            get
+            {
+                // Retrieve the string value from session
+                var value = HttpContext.Session.GetString("limited");
+
+                // If no value is set, default to false
+                if (value == null)
+                {
+                    Console.WriteLine("Session 'limited' value not found, defaulting to false.");
                     return false;
                 }
+
+                // Log the retrieved session value
+                Console.WriteLine($"Getting 'limited' value from session: {value}");
+
+                // Return true if the value is "true" (as a string), otherwise false
+                return value == "true";
             }
-            set {
-                try {
-                    Console.WriteLine($"Setting 'limited' value in session to: {value}");
-                    HttpContext.Session.SetString("limited", value.ToString());
-                }
-                catch (Exception ex){
-                    Console.WriteLine($"Error setting 'limited' value in session: {ex.Message}");
-                }
+            set
+            {
+                // Log the new value being set
+                Console.WriteLine($"Setting 'limited' value in session to: {value}");
+
+                // Store the boolean as a string ("true" or "false") in session
+                HttpContext.Session.SetString("limited", value.ToString());
             }
         }
-
 
         private bool access
         {
-            get => HttpContext.Session.GetString("access") == "true";
-            set => HttpContext.Session.SetString("access", value.ToString());
+            get
+            {
+                // Retrieve the string value from session
+                var value = HttpContext.Session.GetString("access");
+
+                // If no value is set, default to false
+                if (value == null)
+                {
+                    Console.WriteLine("Session 'access' value not found, defaulting to false.");
+                    return false;
+                }
+
+                // Log the retrieved session value
+                Console.WriteLine($"Getting 'access' value from session: {value}");
+
+                // Return true if the value is "true" (as a string), otherwise false
+                return value == "true";
+            }
+            set
+            {
+                // Log the new value being set
+                Console.WriteLine($"Setting 'access' value in session to: {value}");
+
+                // Store the boolean as a string ("true" or "false") in session
+                HttpContext.Session.SetString("access", value.ToString());
+            }
         }
+
 
         private string status
         {
