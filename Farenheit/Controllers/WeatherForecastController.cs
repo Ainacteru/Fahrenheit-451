@@ -17,6 +17,8 @@ namespace Fahrenheit451API.Controllers
         private static string status = "";
         private static int author = 0;
 
+        int step = 0;
+
         private static readonly string[] books = {
             "Gulliver's Travels",
             "On the Origin of Species", 
@@ -220,7 +222,7 @@ namespace Fahrenheit451API.Controllers
         }
 
         private string SignIn(string input) {
-            int step = 0;
+            
             switch (step) {
                 case 0:
                     if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
