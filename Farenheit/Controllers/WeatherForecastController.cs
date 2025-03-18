@@ -17,7 +17,7 @@ namespace Fahrenheit451API.Controllers
         private static string status = "";
         private static int author = 0;
 
-        int step = 0;
+        private static int step = 0;
 
         private static readonly string[] books = {
             "Gulliver's Travels",
