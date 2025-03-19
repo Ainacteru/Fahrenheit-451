@@ -13,10 +13,8 @@ namespace Fahrenheit451API.Controllers
         private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/TextFiles");
         
          // Get session values or set defaults
-        private bool limited
-        {
-            get
-            {
+        private bool limited {
+            get {
                 var value = HttpContext.Session.GetBoolean("limited");
 
                 if (value == null)
@@ -27,16 +25,13 @@ namespace Fahrenheit451API.Controllers
 
                 return value.Value;
             }
-            set
-            {
+            set {
                 HttpContext.Session.SetBoolean("limited", value);
             }
         }
 
-        private bool access
-        {
-            get
-            {
+        private bool access {
+            get {
                 var value = HttpContext.Session.GetBoolean("access");
 
                 if (value == null)
@@ -47,26 +42,22 @@ namespace Fahrenheit451API.Controllers
 
                 return value.Value;
             }
-            set
-            {
+            set {
                 HttpContext.Session.SetBoolean("access", value);
             }
         }
 
-        private string status
-        {
+        private string status {
             get => HttpContext.Session.GetString("status") ?? "";
             set => HttpContext.Session.SetString("status", value);
         }
 
-        private int author
-        {
+        private int author {
             get => HttpContext.Session.GetInt32("author") ?? 0;
             set => HttpContext.Session.SetInt32("author", value);
         }
 
-        private int step
-        {
+        private int step {
             get => HttpContext.Session.GetInt32("step") ?? 0;
             set => HttpContext.Session.SetInt32("step", value);
         }
@@ -96,8 +87,7 @@ namespace Fahrenheit451API.Controllers
         };
 
         [HttpPost]
-        public IActionResult Respond([FromBody] UserInput input)
-        {
+        public IActionResult Respond([FromBody] UserInput input) {
             //int step = HttpContext.Session.GetInt32("step") ?? 0;
 
             string response = ProcessInput(input.Text);
@@ -107,8 +97,7 @@ namespace Fahrenheit451API.Controllers
             return Ok(new { response });
         }
 
-        private string ProcessInput(string answer)
-        {
+        private string ProcessInput(string answer) {
             try {
                 string input = answer.ToLower();
                 if (!access) {
@@ -210,15 +199,14 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-        private string AvailableBooks(){
+        private string AvailableBooks() {
             if (limited) {
                 return "You have access to 1 book(s):\n" + books[author];
             }
             return "you have access to 14 book(s):\n" + string.Join("\n", books);
         }
 
-        private string PermissionRiddle()
-        {
+        private string PermissionRiddle() {
             status = "getting permission";
             return "I rise from the ashes, reborn again, where books are a symbol of hope, when all seems lost, I'm reborn, no matter what";
         }
@@ -233,8 +221,7 @@ namespace Fahrenheit451API.Controllers
             return false;
         }
 
-        private string GetHelp()
-        {
+        private string GetHelp() {
             string additionalStuff;
             if (limited) {
                 additionalStuff = "get permission - Request additional access\n";
@@ -250,8 +237,7 @@ namespace Fahrenheit451API.Controllers
                         additionalStuff;
         }
 
-        private bool CheckForName(string input)
-        {
+        private bool CheckForName(string input) {
             for (int i = 0; i < authors.Length; i++)
             {
                 if (input == authors[i].ToLower())
@@ -263,8 +249,7 @@ namespace Fahrenheit451API.Controllers
             return false;
         }
 
-        private bool CheckForBook(string input)
-        {
+        private bool CheckForBook(string input) {
             if (input == books[author].ToLower()) {
                 return true;
             }
@@ -316,6 +301,7 @@ namespace Fahrenheit451API.Controllers
             }
         }
     }
+    
     public class UserInput
     {
         public required string Text { get; set; }
