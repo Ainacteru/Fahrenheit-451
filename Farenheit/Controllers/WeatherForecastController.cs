@@ -47,7 +47,7 @@ namespace Fahrenheit451API.Controllers
         }
 
         private string status {
-            get => HttpContext.Session.GetString("status") ?? "welcome";
+            get => HttpContext.Session.GetString("status") ?? "";
             set => HttpContext.Session.SetString("status", value);
         }
 
@@ -65,6 +65,9 @@ namespace Fahrenheit451API.Controllers
 
         [HttpPost]
         public IActionResult Respond([FromBody] UserInput input) {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("status"))) {
+                status = "welcome";  // Ensure it's set for new sessions
+            }
 
             string response = ProcessInput(input.Text);
 
