@@ -171,13 +171,13 @@ namespace Fahrenheit451API.Controllers
                         "books burned - Shows you how many books have been burned\n" +
                         "pass down {book} - Passes down the book to the next generation\n" +
                         "hound status - Returns what the closest mechanical hound is currently doing\n" +
-                        "\n" +
+                        //"\n" +
                         additionalStuff;
         }
 
         private string passDown(string book) {
             foreach (var books in Database.books) {
-                if (book == books) {
+                if (book == books.ToLower()) {
                     return book + "has been passed down to your children";
                 }
             }
