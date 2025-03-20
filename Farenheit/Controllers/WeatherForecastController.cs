@@ -61,7 +61,7 @@ namespace Fahrenheit451API.Controllers
             set => HttpContext.Session.SetInt32("step", value);
         }
 
-       
+       Random rnd = new Random();
 
         [HttpPost]
         public IActionResult Respond([FromBody] UserInput input) {
@@ -176,6 +176,11 @@ namespace Fahrenheit451API.Controllers
                         "hound status - Returns what the closest mechanical hound is currently doing\n" +
                         //"\n" +
                         additionalStuff;
+        }
+
+        private string houndStatus() {
+            int num = rnd.Next(1, 150);
+            return "Closest hound is " + num + " km away";
         }
 
         private string passDown(string book) {
