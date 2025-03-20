@@ -93,6 +93,7 @@
                     sendInput(); // Trigger the input function on Enter
                     // Clear the input field after pressing Enter (after sending input)
                     userInput.value = "";
+                    window.scrollTo(0, document.body.scrollHeight); // Scroll to the bottom of the page after pressing Enter
                 }
             });
 

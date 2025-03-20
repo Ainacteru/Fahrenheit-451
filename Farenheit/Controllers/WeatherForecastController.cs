@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.IO;
+using System.Net;
+using Fahrenheit451API.SessionExtensions;
 
 namespace Fahrenheit451API.Controllers
 {
@@ -7,165 +9,222 @@ namespace Fahrenheit451API.Controllers
     [Route("api/respond")]
     public class FahrenheitController : ControllerBase
     {
-        // Path to the folder containing the text files
-        private readonly string _textFileDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/TextFiles");
+
         
-        private static bool limited = true;
-        private static bool access = false;
+         // Get session values or set defaults
+        private bool limited {
+            get {
+                var value = HttpContext.Session.GetBoolean("limited");
 
-        private static string status = "";
-        private static int author = 0;
+                if (value == null)
+                {
+                    Console.WriteLine("Session 'limited' value not found, defaulting to false.");
+                    return true; // Default to false if not set
+                }
 
-        private static readonly string[] books = {
-            "Gulliver's Travels",
-            "On the Origin of Species", 
-            "The World as Will and Representation",
-            "Relativity: The Special and the General Theory",
-            "The Philosophy of Civilization",
-            "The Clouds",
-            "The Story of My Experiments with Truth",
-            "Dhammapada",
-            "Analects",
-            "Nightmare Abbey",
-            "The Declaration of Independence",
-            "The Gettysburg Address",
-            "Common Sense",
-            "The Prince",
-            "The Bible"
-        };
+                return value.Value;
+            }
+            set {
+                HttpContext.Session.SetBoolean("limited", value);
+            }
+        }
 
-        private static readonly string[] authors = {
-            "Jonathan Swift", "Charles Darwin", "Schopenhauer", "Einstein", "Albert Schweitzer",
-            "Aristophanes", "Mahatma Gandhi", "Gautama Buddha", "Confucius", "Thomas Love Peacock",
-            "Thomas Jefferson", "Lincoln", "Tom Paine", "Machiavelli", "Christ"
-        };
+        private bool access {
+            get {
+                var value = HttpContext.Session.GetBoolean("access");
+
+                if (value == null)
+                {
+                    Console.WriteLine("Session 'access' value not found, defaulting to false.");
+                    return false; // Default to false if not set
+                }
+
+                return value.Value;
+            }
+            set {
+                HttpContext.Session.SetBoolean("access", value);
+            }
+        }
+
+        private string status {
+            get => HttpContext.Session.GetString("status") ?? "";
+            set => HttpContext.Session.SetString("status", value);
+        }
+
+        private int author {
+            get => HttpContext.Session.GetInt32("author") ?? 0;
+            set => HttpContext.Session.SetInt32("author", value);
+        }
+
+        private int step {
+            get => HttpContext.Session.GetInt32("step") ?? 0;
+            set => HttpContext.Session.SetInt32("step", value);
+        }
+
+       
 
         [HttpPost]
-        public IActionResult Respond([FromBody] UserInput input)
-        {
-            int step = HttpContext.Session.GetInt32("step") ?? 0;
+        public IActionResult Respond([FromBody] UserInput input) {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("status"))) {
+                status = "welcome";  // Ensure it's set for new sessions
+            }
 
-            string response = ProcessInput(input.Text, ref step);
+            string response = ProcessInput(input.Text);
 
-            HttpContext.Session.SetInt32("step", step);  // Store updated step
+            if ((step == 0) && (status == "welcome")) {
+                status = "";
+                return Ok(new {message = "welcome! type continue to continue" });
+            }
 
             return Ok(new { response });
         }
 
-        private string ProcessInput(string answer, ref int step)
-        {
-            string input = answer.ToLower();
-            if (!access) 
-            {
-                switch (step) 
-                {
-                    case 0:
-                        if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
-                        if (input == "continue") 
-                        {
-                            step++;
-                            return "Please enter your name:";
-                        }
-                        return "Access Denied.";
-
-                    case 1:
-                        if (CheckForName(input)) 
-                        {
-                            step++;
-                            return "Please enter your assigned title:";
-                        }
-                        else if (input == "ari") {return "ew";}
-                        
-                        return "Invalid name. Try again.";
-
-                    case 2:
-                        if (CheckForBook(input)) 
-                        {
-                            step++;
-                            access = true;
-                            return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
-                        }
-                        return "Incorrect title. Try again.";
-                    default:
-                        return "";
-
+        private string ProcessInput(string answer) {
+            try {
+                string input = answer.ToLower();
+                if (!access) {
+                    return SignIn(input);
+                }
+                else if (limited) {
+                    return LessAccess(input);
+                }
+                else {
+                    return FullAccess(input);
                 }
             }
-            else if (limited) {
-                
-                switch (input)
-                {
-                    case "help":
-                        return GetHelp();
-                    case "get permission":
-                        return PermissionRiddle();
-                    case "books":
-                        return AvailableBooks();
-                    default:
-                        if (isFullPermissionGranted(input)) {
-                            return "Full Access Granted";
-                        }
-                        return "Not a valid command. Type a 'help' for a list of commands";
-                }
+            catch (Exception e) {
+                return "Internal Error: " + e.Message;
             }
-            else {
+        }
+
+        private string LessAccess(string input) {
+            switch (input) {
+                case "help":
+                    return GetHelp();
+                case "get permission":
+                    return PermissionRiddle();
+                case "books":
+                    return AvailableBooks();
+                case "mission":
+                    return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
+                case "members":
+                    return OrginizationMembers();
+                case "books burnt":
+                    return booksBurned();
+                default:
+                    if (isFullPermissionGranted(input)) {
+                        return "Full Access Granted";
+                    } else if (input.StartsWith("open ")) {
+                        // Remove the "open " prefix and match the remaining part with book titles
+                        string bookTitle = input.Substring(5);  // Removes the "open " part
+                        return OpenBook(bookTitle);
+                    } else if (input.StartsWith("pass down ")) {
+                        string bookTitle = input.Substring(10);
+                        return passDown(bookTitle);
+                    }
+                    
+                    return "Not a valid command. Type a 'help' for a list of commands";
+            }
+        }
+
+        private string FullAccess(string input) {
                 switch (input) {
                     case "help":
                         return GetHelp();
                     case "books":
                         return AvailableBooks();
+                    case "mission":
+                        return "Our mission is to rebuild the country so that it is once again has strength through knowledge";
+                    case "members":
+                        return OrginizationMembers();
+                    case "books burnt":
+                        return booksBurned();                       
                     default:
-
-                        if (answer.StartsWith("list")) {
-                             // Remove the "open " prefix and match the remaining part with book titles
-                            //string bookTitle = answer.Substring(5);  // Removes the "open " part
-                            return ListFilePath();
-                        }
-                        if (answer.StartsWith("open ") )
+                        if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
-                            string bookTitle = answer.Substring(5);  // Removes the "open " part
+                            string bookTitle = input.Substring(5);  // Removes the "open " part
                             return OpenBook(bookTitle);
+                        } else if (input.StartsWith("pass down ")) {
+                            string bookTitle = input.Substring(10);
+                            return passDown(bookTitle);
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
-            }
         }
 
-        private string ListFilePath() {
+      
 
-            string rootDir = Directory.GetCurrentDirectory();
-            var allFiles = Directory.GetFiles(rootDir, "*.txt", SearchOption.AllDirectories);
-            
-            if (allFiles.Length == 0)
-            {
-                return "No .txt files found in the entire project.";
+        private string GetHelp() {
+            string additionalStuff;
+            if (limited) {
+                additionalStuff = "get permission - Request additional access\n";
+            } else {
+                additionalStuff = "burn {book} - Removes a book from the database\n" +
+                                  "members - Returns information of people working to achieve the mission goal\n" +
+                                  "search firemen - Returns if known firemen are a threat to the organization\n" +
+                                  "broadcast {message} - Sends a message to other rebellion organizations\n";
             }
+            //secret command: Clarisse - Returns a philosophical question or observation in the style of clarisse
+            return "Available commands:\n" + 
+                        "help - Opens this menu\n" +
+                        "mission - Shows what we are trying to do\n" +
+                        "books - Lists all books available to you\n" +
+                        "open {book} - Shows you the contents of the book that was requested\n" +
+                        "books burned - Shows you how many books have been burned\n" +
+                        "pass down {book} - Passes down the book to the next generation\n" +
+                        "hound status - Returns what the closest mechanical hound is currently doing\n" +
+                        //"\n" +
+                        additionalStuff;
+        }
 
-            return "All .txt files found:\n" + string.Join("\n", allFiles);
+        private string passDown(string book) {
+            foreach (var books in Database.books) {
+                if (book == books.ToLower()) {
+                    return book + "has been passed down to your children";
+                }
+            }
+            return "Book was not found in the database, please use the 'books' command and choose a valid book";
+        }
 
+        private string booksBurned() {
+            return "26% of books have been burnt, we are making more and more, replacing the ones that are no longer readable";
+        }
+        private string OrginizationMembers() {
 
-            //return Path.Combine(_textFileDirectory, input + ".txt") + "\n" + "Current Directory: " + Directory.GetCurrentDirectory() + "\n" + "Looking for text files in: " + _textFileDirectory + "\n";
+            if(!limited) {
+                return "Granger - Writer of the book 'The Fingers in the Glove; the Proper Relationship between the Individual and Society'\n" +
+                "Fred Clement -  former occupant of the Thomas Hardy chair at Cambridge\n" +
+                "Dr. Simmons - Specialist in Ortega y Gasset\n" +
+                "Professor West - Taught ethics at Columbia University\n" +
+                "Guy Montag - Former fireman\n"
+                ;
+            }
+            return "No access to this information";
         }
 
         private string OpenBook(string input) {
 
             try {
-                // Make sure the input is sanitized and used correctly in the file path
-                string filePath = Path.Combine(_textFileDirectory, input + ".txt");
+                // Get all .txt files in the directory
+                string[] files = Directory.GetFiles(Database._textFileDirectory, "*.txt");
 
-                if (limited && (filePath == books[author])) {
-                    return System.IO.File.ReadAllText(filePath);
-                }
-                // Check if the file exists
-                else if (System.IO.File.Exists(filePath))
+                // Find a case-insensitive match
+                string? matchingFile = files
+                    .FirstOrDefault(f => Path.GetFileNameWithoutExtension(f).Equals(input, StringComparison.OrdinalIgnoreCase));
+
+                if (matchingFile != null)
                 {
-                    // Read and return the content of the file
-                    return System.IO.File.ReadAllText(filePath);
+                    if (limited && (matchingFile == Database.books[author])) 
+                    {
+                        return System.IO.File.ReadAllText(matchingFile);
+                    }
+                    return System.IO.File.ReadAllText(matchingFile);
                 }
 
-                string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
-                return "Files found:\n" + string.Join("\n", files);
+                return "Text not found in Database";
+                // string[] files = Directory.GetFiles(_textFileDirectory, "*.txt");
+                // return "Files found:\n" + string.Join("\n", files);
             }
             catch (Exception ex)
             {
@@ -174,15 +233,14 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
-        private string AvailableBooks(){
+        private string AvailableBooks() {
             if (limited) {
-                return "You have access to 1 book(s):\n" + books[author];
+                return "You have access to 1 book(s):\n" + Database.books[author];
             }
-            return "you have access to 14 book(s):\n" + string.Join("\n", books);
+            return "you have access to 14 book(s):\n" + string.Join("\n", Database.books);
         }
 
-        private string PermissionRiddle()
-        {
+        private string PermissionRiddle() {
             status = "getting permission";
             return "I rise from the ashes, reborn again, where books are a symbol of hope, when all seems lost, I'm reborn, no matter what";
         }
@@ -197,28 +255,10 @@ namespace Fahrenheit451API.Controllers
             return false;
         }
 
-        private string GetHelp()
-        {
-            string additionalStuff;
-            if (limited)
+        private bool CheckForName(string input) {
+            for (int i = 0; i < Database.authors.Length; i++)
             {
-                additionalStuff = "get permission - Request additional access\n";
-            }
-            else {
-                additionalStuff = "";
-            }
-
-            return "Available commands:\n" + 
-                        "help - Opens this menu\n" +
-                        "books - Lists all books available to you\n" +
-                        additionalStuff;
-        }
-
-        private bool CheckForName(string input)
-        {
-            for (int i = 0; i < authors.Length; i++)
-            {
-                if (input == authors[i].ToLower())
+                if (input == Database.authors[i].ToLower())
                 {
                     author = i;
                     return true;
@@ -227,9 +267,8 @@ namespace Fahrenheit451API.Controllers
             return false;
         }
 
-        private bool CheckForBook(string input)
-        {
-            if (input == books[author].ToLower()) {
+        private bool CheckForBook(string input) {
+            if (input == Database.books[author].ToLower()) {
                 return true;
             }
             else {
@@ -237,9 +276,50 @@ namespace Fahrenheit451API.Controllers
             }
         }
 
+        private string SignIn(string input) {
+            
+            switch (step) {
+                case 0:
+                    if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
+                    if (input == "continue") 
+                    {
+                        step++;
+                        return "Please enter your name:";
+                    }
+                    return "Access Denied.";
 
-        
+                case 1:
+                    try { 
+                        if (CheckForName(input)) 
+                        {
+                            step++;
+                            return "Please enter your assigned title:";
+                        }
+                        else if (input == "ari") {
+                            throw new StackOverflowException("OH EW!");
+                        }
+                        
+                        return "Invalid name. Try again.";
+                    }
+                    catch (Exception e) {
+                        return e.Message;
+                    }
+
+                case 2:
+                    if (CheckForBook(input)) 
+                    {
+                        step++;
+                        access = true;
+                        return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
+                    }
+                    return "Incorrect title. Try again.";
+                default:
+                    return "";
+
+            }
+        }
     }
+    
     public class UserInput
     {
         public required string Text { get; set; }
