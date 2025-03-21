@@ -203,6 +203,7 @@ namespace Fahrenheit451API.Controllers
                 if (input == Database.books[i].ToLower()) {
 
                     Database.books[i] = ""; 
+                    Console.WriteLine(Database.authors[author] + " has burnt the book: " + input);
                     return "The book '" + input + "' has been burnt and is no longer accessible. \n" +
                            "You can no longer read the book or log in";
                 }
@@ -219,6 +220,8 @@ namespace Fahrenheit451API.Controllers
                    "Black  - Fireman\n" +
                    "       - Status: Arrested for carrying books\n\n" +
                    "Stoneman - Fireman\n" +
+                   "         - Status: Probably a bad driver\n\n" +
+                   "Montag - Fireman\n" +
                    "         - Status: Probably a bad driver\n";
             
         }
@@ -249,10 +252,10 @@ namespace Fahrenheit451API.Controllers
 
             if(!limited) {
                 return "Granger - Writer of the book 'The Fingers in the Glove; the Proper Relationship between the Individual and Society'\n" +
-                "Fred Clement -  former occupant of the Thomas Hardy chair at Cambridge\n" +
-                "Dr. Simmons - Specialist in Ortega y Gasset\n" +
-                "Professor West - Taught ethics at Columbia University\n" +
-                "Guy Montag - Former fireman\n"
+                        "Fred Clement -  former occupant of the Thomas Hardy chair at Cambridge\n" +
+                        "Dr. Simmons - Specialist in Ortega y Gasset\n" +
+                        "Professor West - Taught ethics at Columbia University\n" +
+                        "Guy Montag - Former fireman\n"
                 ;
             }
             return "No access to this information";
@@ -292,7 +295,7 @@ namespace Fahrenheit451API.Controllers
             if (limited) {
                 return "You have access to 1 book(s):\n" + Database.books[author];
             }
-            return "you have access to 14 book(s):\n" + string.Join("\n", Database.books);
+            return "you have access to" + Database.books.Length + " book(s):\n" + string.Join("\n", Database.books);
         }
 
         private string PermissionRiddle() {
@@ -339,7 +342,7 @@ namespace Fahrenheit451API.Controllers
                         step++;
                         return "Please enter your name:";
                     }
-                    return "Access Denied.";
+                    return "Please type 'continue' to proceed";
 
                 case 1:
                     try { 
@@ -365,7 +368,8 @@ namespace Fahrenheit451API.Controllers
                         access = true;
                         return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
                     }
-                    return "Incorrect title. Try again.";
+                    step--;
+                    return "Incorrect title. Please type in your name";
                 default:
                     return "";
 
