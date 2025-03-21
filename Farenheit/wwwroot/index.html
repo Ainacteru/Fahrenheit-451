@@ -56,54 +56,70 @@
         }
 
     </style>
-    <script>
-        async function sendInput() {
-            let userText = document.getElementById("userInput").value;
-            if (!userText) return;
-
-            const outputDiv = document.getElementById("response");
-            outputDiv.innerHTML += `<div class="output prompt">> ${userText}</div>`;
-
-            let response = await fetch("https://farenheit-451.onrender.com/api/respond", { // Update the URL accordingly
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: userText })
-            });
-            let data = await response.json();
+        <script>
+            document.addEventListener("DOMContentLoaded", async () => {
+                const userInput = document.getElementById("userInput");
+                const outputDiv = document.getElementById("response");
             
-            // Ensure newlines render properly in HTML
-            let formattedResponse = data.response.replace(/\n/g, "<br>");
+                // Automatically fetch welcome message when page loads
+                try {
+                    let response = await fetch("https://farenheit-451.onrender.com/api/respond", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ text: "" }) // Send an empty input to trigger the welcome message
+                    });
             
-            // Display the response from the server
-            outputDiv.innerHTML += `<div class="output">${data.response}</div>`;
-            document.getElementById("userInput").value = ""; // Clear input after submitting
-            outputDiv.scrollTop = outputDiv.scrollHeight; // Auto-scroll to the bottom
-        }
-
-        // Listen for the Enter key press to submit input
-        document.addEventListener("DOMContentLoaded", () => {
-            const userInput = document.getElementById("userInput");
-
-            // Automatically focus the input field on page load
-            userInput.focus();
-
-            userInput.addEventListener("keydown", (event) => {
-                if (event.key === "Enter") {
-                    event.preventDefault(); // Prevent form submission (if any)
-                    sendInput(); // Trigger the input function on Enter
-                    // Clear the input field after pressing Enter (after sending input)
-                    userInput.value = "";
-                    window.scrollTo(0, document.body.scrollHeight); // Scroll to the bottom of the page after pressing Enter
+                    let data = await response.json();
+                    if (data.message) {
+                        outputDiv.innerHTML += `<div class="output">${data.message}</div>`;
+                    }
+                } catch (error) {
+                    console.error("Error fetching welcome message:", error);
                 }
+            
+                // Auto-focus input field
+                userInput.focus();
+            
+                userInput.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        event.preventDefault();
+                        sendInput();
+                    }
+                });
+            
+                // Prevent input from losing focus
+                setInterval(() => {
+                    if (document.activeElement !== userInput) {
+                        userInput.focus();
+                    }
+                }, 100);
             });
-
-            // Prevent the input from being deselected (always focus)
-            setInterval(() => {
-                if (document.activeElement !== userInput) {
-                    userInput.focus();
+            
+            async function sendInput() {
+                let userText = document.getElementById("userInput").value;
+                if (!userText) return;
+            
+                const outputDiv = document.getElementById("response");
+                outputDiv.innerHTML += `<div class="output prompt">> ${userText}</div>`;
+            
+                try {
+                    let response = await fetch("https://farenheit-451.onrender.com/api/respond", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ text: userText })
+                    });
+            
+                    let data = await response.json();
+                    if (data.message) {
+                        outputDiv.innerHTML += `<div class="output">${data.message.replace(/\n/g, "<br>")}</div>`;
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
                 }
-            }, 100); // Every 100ms, check if the input is focused
-        });
+            
+                document.getElementById("userInput").value = "";
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+            }
     </script>
 </head>
 <body>

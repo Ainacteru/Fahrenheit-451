@@ -69,14 +69,13 @@ namespace Fahrenheit451API.Controllers
                 status = "welcome";  // Ensure it's set for new sessions
             }
 
-            string response = ProcessInput(input.Text);
-
             if ((step == 0) && (status == "welcome")) {
-                status = "";
-                return Ok(new {message = "welcome! type continue to continue" });
+                status = "enter";
+                return Ok(new { message = "Welcome! Type 'continue' to continue." });
             }
 
-            return Ok(new { response });
+            string response = ProcessInput(input.Text);
+            return Ok(new { message = response }); // Always return "message"
         }
 
         private string ProcessInput(string answer) {
@@ -111,6 +110,8 @@ namespace Fahrenheit451API.Controllers
                     return OrginizationMembers();
                 case "books burnt":
                     return booksBurned();
+                case "hound status":
+                    return houndStatus();
                 default:
                     if (isFullPermissionGranted(input)) {
                         return "Full Access Granted";
@@ -138,16 +139,33 @@ namespace Fahrenheit451API.Controllers
                     case "members":
                         return OrginizationMembers();
                     case "books burnt":
-                        return booksBurned();                       
+                        return booksBurned();
+                    case "hound status":
+                        return houndStatus();
+                    case "search firemen":
+                        return searchFiremen();         
                     default:
                         if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
                             string bookTitle = input.Substring(5);  // Removes the "open " part
                             return OpenBook(bookTitle);
+
                         } else if (input.StartsWith("pass down ")) {
+
                             string bookTitle = input.Substring(10);
                             return passDown(bookTitle);
+
+                        } else if (input.StartsWith("broadcast ")) {
+
+                            string message = input.Substring(10);
+                            return broadcast(message);
+
+                        } else if (input.StartsWith("burn ")) {
+
+                            string message = input.Substring(5);
+                            return burnBook(message);
+
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
@@ -171,38 +189,73 @@ namespace Fahrenheit451API.Controllers
                         "mission - Shows what we are trying to do\n" +
                         "books - Lists all books available to you\n" +
                         "open {book} - Shows you the contents of the book that was requested\n" +
-                        "books burned - Shows you how many books have been burned\n" +
+                        "books burnt - Shows you how many books have been burned\n" +
                         "pass down {book} - Passes down the book to the next generation\n" +
                         "hound status - Returns what the closest mechanical hound is currently doing\n" +
                         //"\n" +
                         additionalStuff;
         }
 
+        public string burnBook(string input) {
+
+            for (int i = 0; i < Database.books.Length; i++) {
+
+                if (input == Database.books[i].ToLower()) {
+
+                    Database.books[i] = ""; 
+                    Console.WriteLine(Database.authors[author] + " has burnt the book: " + input);
+                    return "The book '" + input + "' has been burnt and is no longer accessible. \n" +
+                           "You can no longer read the book or log in";
+                }
+
+            }
+            
+            return "The book you wanted to burn was not found in the database. Please use the 'books' command and choose a valid book";
+
+        }
+
+        private string searchFiremen() {
+            return "Beatty - Firemen Captain\n" +
+                   "       - Status: Dead\n\n" +
+                   "Black  - Fireman\n" +
+                   "       - Status: Arrested for carrying books\n\n" +
+                   "Stoneman - Fireman\n" +
+                   "         - Status: Probably a bad driver\n\n" +
+                   "Montag - Fireman\n" +
+                   "         - Status: Probably a bad driver\n";
+            
+        }
+
+        private string broadcast(string input) {
+            Console.WriteLine(Database.authors[author] + " has sent the message: " + input);
+            return "'" + input + "' was succesfully sent";
+        }
+
         private string houndStatus() {
             int num = rnd.Next(1, 150);
-            return "Closest hound is " + num + " km away";
+            return "Hound " + ((num % 2) + 8) + " is " + num + " km away";
         }
 
         private string passDown(string book) {
             foreach (var books in Database.books) {
                 if (book == books.ToLower()) {
-                    return book + "has been passed down to your children";
+                    return book + " has been passed down to your children";
                 }
             }
             return "Book was not found in the database, please use the 'books' command and choose a valid book";
         }
 
         private string booksBurned() {
-            return "26% of books have been burnt, we are making more and more, replacing the ones that are no longer readable";
+            return "We have no idea how many books have actually been burnt";
         }
         private string OrginizationMembers() {
 
             if(!limited) {
                 return "Granger - Writer of the book 'The Fingers in the Glove; the Proper Relationship between the Individual and Society'\n" +
-                "Fred Clement -  former occupant of the Thomas Hardy chair at Cambridge\n" +
-                "Dr. Simmons - Specialist in Ortega y Gasset\n" +
-                "Professor West - Taught ethics at Columbia University\n" +
-                "Guy Montag - Former fireman\n"
+                        "Fred Clement -  former occupant of the Thomas Hardy chair at Cambridge\n" +
+                        "Dr. Simmons - Specialist in Ortega y Gasset\n" +
+                        "Professor West - Taught ethics at Columbia University\n" +
+                        "Guy Montag - Former fireman\n"
                 ;
             }
             return "No access to this information";
@@ -242,7 +295,7 @@ namespace Fahrenheit451API.Controllers
             if (limited) {
                 return "You have access to 1 book(s):\n" + Database.books[author];
             }
-            return "you have access to 14 book(s):\n" + string.Join("\n", Database.books);
+            return "you have access to" + Database.books.Length + " book(s):\n" + string.Join("\n", Database.books);
         }
 
         private string PermissionRiddle() {
@@ -273,25 +326,23 @@ namespace Fahrenheit451API.Controllers
         }
 
         private bool CheckForBook(string input) {
-            if (input == Database.books[author].ToLower()) {
+            if (!string.IsNullOrEmpty(input) && input == Database.books[author].ToLower()) {
                 return true;
             }
-            else {
-                return false;
-            }
+            return false;
         }
 
         private string SignIn(string input) {
             
             switch (step) {
                 case 0:
-                    if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
+                    //if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
                     if (input == "continue") 
                     {
                         step++;
                         return "Please enter your name:";
                     }
-                    return "Access Denied.";
+                    return "Please type 'continue' to proceed";
 
                 case 1:
                     try { 
@@ -317,7 +368,8 @@ namespace Fahrenheit451API.Controllers
                         access = true;
                         return "Access granted. You can access 1 book(s).   Type 'help' for a list of commands";
                     }
-                    return "Incorrect title. Try again.";
+                    step--;
+                    return "Incorrect title. Please type in your name";
                 default:
                     return "";
 
