@@ -18,7 +18,7 @@ namespace Fahrenheit451API.Controllers
 
                 if (value == null)
                 {
-                    Console.WriteLine("Session 'limited' value not found, defaulting to false.");
+                    //Console.WriteLine("Session 'limited' value not found, defaulting to false.");
                     return true; // Default to false if not set
                 }
 
@@ -35,7 +35,7 @@ namespace Fahrenheit451API.Controllers
 
                 if (value == null)
                 {
-                    Console.WriteLine("Session 'access' value not found, defaulting to false.");
+                    //Console.WriteLine("Session 'access' value not found, defaulting to false.");
                     return false; // Default to false if not set
                 }
 
@@ -200,7 +200,7 @@ namespace Fahrenheit451API.Controllers
 
             for (int i = 0; i < Database.books.Length; i++) {
 
-                if (input == Database.books[i].ToLower()) {
+                if (input == Database.books[i].ToLower() && (input != "")) {
 
                     Database.books[i] = ""; 
                     Console.WriteLine(Database.authors[author] + " has burnt the book: " + input);
