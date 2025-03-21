@@ -18,7 +18,7 @@ namespace Fahrenheit451API.Controllers
 
                 if (value == null)
                 {
-                    Console.WriteLine("Session 'limited' value not found, defaulting to false.");
+                    //Console.WriteLine("Session 'limited' value not found, defaulting to false.");
                     return true; // Default to false if not set
                 }
 
@@ -35,7 +35,7 @@ namespace Fahrenheit451API.Controllers
 
                 if (value == null)
                 {
-                    Console.WriteLine("Session 'access' value not found, defaulting to false.");
+                    //Console.WriteLine("Session 'access' value not found, defaulting to false.");
                     return false; // Default to false if not set
                 }
 
@@ -200,7 +200,7 @@ namespace Fahrenheit451API.Controllers
 
             for (int i = 0; i < Database.books.Length; i++) {
 
-                if (input == Database.books[i].ToLower()) {
+                if (input == Database.books[i].ToLower() && (input != "")) {
 
                     Database.books[i] = ""; 
                     Console.WriteLine(Database.authors[author] + " has burnt the book: " + input);
@@ -222,7 +222,7 @@ namespace Fahrenheit451API.Controllers
                    "Stoneman - Fireman\n" +
                    "         - Status: Probably a bad driver\n\n" +
                    "Montag - Fireman\n" +
-                   "         - Status: Probably a bad driver\n";
+                   "         - Status: Not a fireman anymore\n";
             
         }
 
@@ -246,7 +246,7 @@ namespace Fahrenheit451API.Controllers
         }
 
         private string booksBurned() {
-            return "We have no idea how many books have actually been burnt";
+            return "We have no idea how many books have actually been burnt, we just know that there are too many books burnt that we can't count it";
         }
         private string OrginizationMembers() {
 
@@ -295,7 +295,17 @@ namespace Fahrenheit451API.Controllers
             if (limited) {
                 return "You have access to 1 book(s):\n" + Database.books[author];
             }
-            return "you have access to" + Database.books.Length + " book(s):\n" + string.Join("\n", Database.books);
+
+            int count = 0;
+
+            foreach (string book in Database.books)
+            {
+                if (!string.IsNullOrEmpty(book))
+                {
+                    count++;
+                }
+            }
+            return "you have access to " + count + " book(s):\n" + string.Join("\n", Database.books);
         }
 
         private string PermissionRiddle() {

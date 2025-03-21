@@ -1,0 +1,17 @@
+Chapter 5 of Relativity: The Special and the General Theory by Einstein
+
+Nevertheless, there are two general facts which at the outset speak very much in favour of the validity of the principle of relativity. 
+Even though classical mechanics does not supply us with a sufficiently broad basis for the theoretical presentation of all physical phenomena, 
+still we must grant it a considerable measure of “truth,” since it supplies us with the actual motions of the heavenly bodies with a delicacy of detail little short of wonderful. 
+The principle of relativity must therefore apply with great accuracy in the domain of mechanics. 
+But that a principle of such broad generality should hold with such exactness in one domain of phenomena, and yet should be invalid for another, is a priori not very probable.
+
+[...]
+
+Now in virtue of its motion in an orbit round the sun, our earth is comparable with a railway carriage travelling with a velocity of about 30 kilometres per second. 
+If the principle of relativity were not valid we should therefore expect that the direction of motion of the earth at any moment would enter into the laws of nature, 
+and also that physical systems in their behaviour would be dependent on the orientation in space with respect to the earth. 
+For owing to the alteration in direction of the velocity of revolution of the earth in the course of a year, 
+the earth cannot be at rest relative to the hypothetical system K0 throughout the whole year. 
+However, the most careful observations have never revealed such anisotropic properties in terrestrial physical space, 
+i.e. a physical non-equivalence of different directions. This is very powerful argument in favour of the principle of relativity.
