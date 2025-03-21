@@ -70,7 +70,7 @@ namespace Fahrenheit451API.Controllers
             }
 
             if ((step == 0) && (status == "welcome")) {
-                status = "";
+                status = "enter";
                 return Ok(new { message = "Welcome! Type 'continue' to continue." });
             }
 
