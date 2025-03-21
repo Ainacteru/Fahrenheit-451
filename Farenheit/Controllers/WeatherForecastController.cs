@@ -69,14 +69,13 @@ namespace Fahrenheit451API.Controllers
                 status = "welcome";  // Ensure it's set for new sessions
             }
 
-            string response = ProcessInput(input.Text);
-
             if ((step == 0) && (status == "welcome")) {
                 status = "";
-                return Ok(new {message = "welcome! type continue to continue" });
+                return Ok(new { message = "Welcome! Type 'continue' to continue." });
             }
 
-            return Ok(new { response });
+            string response = ProcessInput(input.Text);
+            return Ok(new { message = response }); // Always return "message"
         }
 
         private string ProcessInput(string answer) {
@@ -314,7 +313,7 @@ namespace Fahrenheit451API.Controllers
             
             switch (step) {
                 case 0:
-                    if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
+                    //if(input == "y") {step = 3; limited = false; access = true; return "COOLEST PERSON IN THE WORLD!!";}
                     if (input == "continue") 
                     {
                         step++;
