@@ -111,6 +111,8 @@ namespace Fahrenheit451API.Controllers
                     return OrginizationMembers();
                 case "books burnt":
                     return booksBurned();
+                case "hound status":
+                    return houndStatus();
                 default:
                     if (isFullPermissionGranted(input)) {
                         return "Full Access Granted";
@@ -138,16 +140,28 @@ namespace Fahrenheit451API.Controllers
                     case "members":
                         return OrginizationMembers();
                     case "books burnt":
-                        return booksBurned();                       
+                        return booksBurned();
+                    case "hound status":
+                        return houndStatus();
+                    case "search firemen":
+                        return searchFiremen();         
                     default:
                         if (input.StartsWith("open ") )
                         {
                             // Remove the "open " prefix and match the remaining part with book titles
                             string bookTitle = input.Substring(5);  // Removes the "open " part
                             return OpenBook(bookTitle);
+
                         } else if (input.StartsWith("pass down ")) {
+
                             string bookTitle = input.Substring(10);
                             return passDown(bookTitle);
+
+                        } else if (input.StartsWith("broadcast ")) {
+
+                            string message = input.Substring(10);
+                            return broadcast(message);
+
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
@@ -178,9 +192,24 @@ namespace Fahrenheit451API.Controllers
                         additionalStuff;
         }
 
+        private string searchFiremen() {
+            return "Beatty - Firemen Captain\n" +
+                   "       - Status: Dead\n\n" +
+                   "Black  - Fireman\n" +
+                   "       - Status: Arrested for carrying books\n\n" +
+                   "Stoneman - Chief of the Fire house\n" +
+                   "         - Status: Probably a bad driver\n";
+            
+        }
+
+        private string broadcast(string input) {
+            Console.WriteLine(Database.authors[author] + "has sent the message: " + input);
+            return "'" + input + "' was succesfully sent";
+        }
+
         private string houndStatus() {
             int num = rnd.Next(1, 150);
-            return "Closest hound is " + num + " km away";
+            return "Hound " + ((num % 2) + 8) + " is " + num + " km away";
         }
 
         private string passDown(string book) {
@@ -193,7 +222,7 @@ namespace Fahrenheit451API.Controllers
         }
 
         private string booksBurned() {
-            return "26% of books have been burnt, we are making more and more, replacing the ones that are no longer readable";
+            return "We have no idea how many books have actually been burnt";
         }
         private string OrginizationMembers() {
 
