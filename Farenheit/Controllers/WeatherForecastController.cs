@@ -161,6 +161,11 @@ namespace Fahrenheit451API.Controllers
                             string message = input.Substring(10);
                             return broadcast(message);
 
+                        } else if (input.StartsWith("burn ")) {
+
+                            string message = input.Substring(5);
+                            return burnBook(message);
+
                         }
                         return "Not a valid command. Type a 'help' for a list of commands"; 
                 }
@@ -184,11 +189,28 @@ namespace Fahrenheit451API.Controllers
                         "mission - Shows what we are trying to do\n" +
                         "books - Lists all books available to you\n" +
                         "open {book} - Shows you the contents of the book that was requested\n" +
-                        "books burned - Shows you how many books have been burned\n" +
+                        "books burnt - Shows you how many books have been burned\n" +
                         "pass down {book} - Passes down the book to the next generation\n" +
                         "hound status - Returns what the closest mechanical hound is currently doing\n" +
                         //"\n" +
                         additionalStuff;
+        }
+
+        public string burnBook(string input) {
+
+            for (int i = 0; i < Database.books.Length; i++) {
+
+                if (input == Database.books[i].ToLower()) {
+
+                    Database.books[i] = ""; 
+                    return "The book '" + input + "' has been burnt and is no longer accessible. \n" +
+                           "You can no longer read the book or log in";
+                }
+
+            }
+            
+            return "The book you wanted to burn was not found in the database. Please use the 'books' command and choose a valid book";
+
         }
 
         private string searchFiremen() {
@@ -196,13 +218,13 @@ namespace Fahrenheit451API.Controllers
                    "       - Status: Dead\n\n" +
                    "Black  - Fireman\n" +
                    "       - Status: Arrested for carrying books\n\n" +
-                   "Stoneman - Chief of the Fire house\n" +
+                   "Stoneman - Fireman\n" +
                    "         - Status: Probably a bad driver\n";
             
         }
 
         private string broadcast(string input) {
-            Console.WriteLine(Database.authors[author] + "has sent the message: " + input);
+            Console.WriteLine(Database.authors[author] + " has sent the message: " + input);
             return "'" + input + "' was succesfully sent";
         }
 
@@ -214,7 +236,7 @@ namespace Fahrenheit451API.Controllers
         private string passDown(string book) {
             foreach (var books in Database.books) {
                 if (book == books.ToLower()) {
-                    return book + "has been passed down to your children";
+                    return book + " has been passed down to your children";
                 }
             }
             return "Book was not found in the database, please use the 'books' command and choose a valid book";
@@ -301,12 +323,10 @@ namespace Fahrenheit451API.Controllers
         }
 
         private bool CheckForBook(string input) {
-            if (input == Database.books[author].ToLower()) {
+            if (!string.IsNullOrEmpty(input) && input == Database.books[author].ToLower()) {
                 return true;
             }
-            else {
-                return false;
-            }
+            return false;
         }
 
         private string SignIn(string input) {
