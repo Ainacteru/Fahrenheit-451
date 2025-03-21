@@ -1,2 +1,14 @@
-Chapter 5 of On the Origin of Species
+Chapter 5 of On the Origin of Species by: Charlse Darwin
 
+In some cases we might easily put down to disuse modifications of structure which are wholly, or mainly due to natural selection. 
+Mr. Wollaston has discovered the remarkable fact that 200 beetles, out of the 550 species (but more are now known) inhabiting Madeira, are so far deficient in wings that they cannot fly;
+and that, of the twenty-nine endemic genera, no less than twenty-three have all their species in this condition! 
+Several facts, namely, that beetles in many parts of the world are very frequently blown to sea and perish; 
+that the beetles in Madeira, as observed by Mr. Wollaston, lie much concealed, until the wind lulls and the sun shines;
+that the proportion of wingless beetles is larger on the exposed Desertas than in Madeira itself;
+and especially the extraordinary fact, so strongly insisted on by Mr. Wollaston, that certain large groups of beetles, elsewhere excessively numerous,
+which absolutely require the use of their wings, are here almost entirely absent. 
+These several considerations make me believe that the wingless condition of so many Madeira beetles is mainly due to the action of natural selection, combined probably with disuse. 
+For during many successive generations each individual beetle which flew least, 
+either from its wings having been ever so little less perfectly developed or from indolent habit, will have had the best chance of surviving from not being blown out to sea;
+and, on the other hand, those beetles which most readily took to flight would oftenest have been blown to sea, and thus destroyed.
